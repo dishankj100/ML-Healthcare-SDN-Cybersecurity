@@ -1,100 +1,145 @@
-# 💡 ML Healthcare & Cyber Security Project
+# 💡 ML Healthcare & SDN Cybersecurity
 
-This is my **B.Tech Major Project (2024–25)** combining the power of **Machine Learning** with real-world **Healthcare** and **Cybersecurity** applications. The project focuses on detecting attacks and anomalies in sensitive healthcare data using classification techniques, presented through an interactive web application.
+## Overview
 
----
+**ML Healthcare & SDN Cybersecurity** is a B.Tech major project focused on exploring the use of Machine Learning (ML) for healthcare network security and cyberattack detection.
+
+The project aims to analyze network traffic, identify potentially malicious activities, and classify traffic patterns using machine learning techniques. A web-based interface built with Flask provides a way to interact with the application and view its results.
+
+This project combines machine learning, cybersecurity, and web development to explore approaches for improving the security of healthcare-related network environments.
 
 ## 🚀 Features
 
-- 🧠 Trained ML model for intrusion detection in healthcare systems
-- 🔐 Covers brute-force, DDoS, SQL injection, OS scans, and more
-- 📊 Data preprocessing, feature engineering, and model evaluation
-- 🌐 Web interface built with Flask and HTML templates
-- 📦 Final model compressed as `model.zip` (GitHub file size compliant)
+- 🧠 Machine learning-based network traffic classification and anomaly detection.
+- 🔐 Analysis of potentially malicious network activity, depending on the trained model and available dataset.
+- 📊 Data preprocessing and feature engineering for model development.
+- 📈 Model evaluation using appropriate classification metrics.
+- 🌐 Flask-based web application with HTML templates.
+- 🗃️ Dataset processing and integration with the trained model.
 
----
+## 🛠️ Technology Stack
 
-## 🛠️ Tech Stack
+- **Programming Language:** Python
+- **Machine Learning:** Scikit-learn
+- **Data Processing:** Pandas, NumPy
+- **Model Persistence:** Joblib
+- **Web Framework:** Flask
+- **Frontend:** HTML, CSS, JavaScript
+- **Data Visualization:** Matplotlib, Seaborn
+- **Development Tools:** Jupyter Notebook and Git
 
-- **Language**: Python
-- **Libraries**: Pandas, NumPy, Scikit-Learn, Joblib, Matplotlib, Seaborn
-- **Web Framework**: Flask
-- **Frontend**: HTML, CSS, JavaScript
-- **Visualization**: Matplotlib, Seaborn
+## 📁 Project Structure
 
----
+The project directory may contain the following files and folders, depending on the current implementation:
 
-## 🗂️ Project Structure
+```text
+ML-Healthcare-SDN-Cybersecurity/
+├── Archieve/          # Dataset files, if included
+├── Static/            # Static assets such as CSS and images
+├── Templates/         # Flask HTML templates
+├── Notebook.ipynb     # Model development and experimentation
+├── app.py             # Flask application entry point
+├── model.zip          # Trained model archive, if applicable
+├── processed.csv      # Processed dataset, if included
+├── requirements.txt   # Python dependencies
+├── .gitignore         # Files excluded from Git
+├── LICENSE            # Project license, if applicable
+└── README.md          # Project documentation
+```
 
-ML_Healthcare_CyberSecurity_Project/
-├── Archieve/ # Raw attack/normal CSV datasets
-├── Static/ # Frontend images and assets
-├── Templates/ # HTML templates for Flask
-├── Notebook.ipynb # Jupyter notebook for modeling and testing
-├── app.py # Flask web application
-├── model.zip # Compressed trained model (.sav)
-├── processed.csv # Preprocessed dataset
-├── LICENSE # MIT License (2025)
-└── README.md # This file
+## ⚙️ Getting Started
 
-yaml
-Copy
-Edit
+### Prerequisites
 
----
+- Python 3.10 or another version compatible with the project's dependencies
+- Git
+- pip
 
-## ⚙️ How to Run Locally
+### 1. Clone the repository
 
-1. 🔽 **Clone the repository**:
-   ```bash
-   git clone https://github.com/Meghashyam-adimallam/ML_HealthCare_CyberSecurity_Project.git
-   cd ML_HealthCare_CyberSecurity_Project
-📦 Install dependencies:
+```bash
+git clone https://github.com/dishankj100/ML-Healthcare-SDN-Cybersecurity.git
+cd ML-Healthcare-SDN-Cybersecurity
+```
 
-bash
-Copy
-Edit
+### 2. Create and activate a virtual environment
+
+```bash
+python -m venv .venv
+```
+
+Windows:
+
+```bash
+.venv\Scripts\activate
+```
+
+macOS/Linux:
+
+```bash
+source .venv/bin/activate
+```
+
+### 3. Install dependencies
+
+If the project contains a `requirements.txt` file:
+
+```bash
 pip install -r requirements.txt
-🧳 Unzip the model file:
+```
 
-bash
-Copy
-Edit
-unzip model.zip
-🚀 Start the Flask app:
+### 4. Prepare the trained model
 
-bash
-Copy
-Edit
+If the application requires a model archive, extract it according to the actual model-loading implementation and ensure the expected model file is available.
+
+For example, if `model.zip` contains the required model:
+
+```bash
+python -m zipfile -e model.zip .
+```
+
+Skip this step if the model is already extracted or the application loads it differently.
+
+### 5. Run the application
+
+```bash
 python app.py
-🔍 Open your browser at:
-http://localhost:5000
+```
 
-📁 Dataset Sources
-Custom attack datasets simulated for academic purposes — including:
+Open the local URL displayed by Flask in your terminal, commonly:
 
-Brute Force
+http://127.0.0.1:5000/
 
-DDoS (UDP/TCP)
+## 📊 Dataset and Model
 
-SQL Injection
+The application uses dataset features to support machine learning-based traffic classification or attack detection.
 
-OS/Port Scan
+Document the following here once verified against the actual implementation:
 
-Normal traffic
+- Dataset source and license.
+- Types of traffic or attacks represented in the dataset.
+- Data preprocessing and feature selection methods.
+- Machine learning algorithm used.
+- Model evaluation results and limitations.
 
-📌 Notes
-model.sav was over 100MB and is excluded from the repo (GitHub limit).
+Do not include confidential, personal, or sensitive healthcare data in the public repository.
 
-The model is included as a .zip and can be extracted before use.
+## 🔒 Security and Limitations
 
-📝 License
-This project is licensed under the MIT License.
+- Model predictions are experimental and should not be treated as a guarantee that traffic is safe or malicious.
+- Performance depends on dataset quality, model training, and the traffic being analyzed.
+- The application should be tested and secured before deployment beyond a local development environment.
+- API keys, passwords, private configuration files, and sensitive datasets should not be committed to GitHub.
 
-🙋‍♀️ Author
-Megha Shyam Adimallam
-📬 Email: meghashyamadimalla2003@gmail.com
-🌐 Portfolio: https://www.meghashyamadimallam.com
-🔗 GitHub: @Meghashyam-adimallam
-🔗 LinkedIn: Megha Shyam
+## 👨‍💻 Author
+
+**Dishank Jain**
+
+- GitHub: [@dishankj100](https://github.com/dishankj100)
+
+Add your preferred contact details or professional portfolio here if you want to share them publicly.
+
+## 📜 License
+
+Specify the license applicable to this project and its original and third-party components. Only include an MIT license statement if the repository actually contains an appropriate MIT `LICENSE` file and you have the right to distribute the included materials under those terms.
 
