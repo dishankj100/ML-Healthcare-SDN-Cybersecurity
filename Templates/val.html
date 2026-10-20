@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>OTP Verification - Cyber Shield</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body style="display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px;">
+  <div class="cs-card" style="width: 100%; max-width: 420px; padding: 36px 30px; text-align: center;">
+    <span class="cs-brand-icon" style="width: 48px; height: 48px; font-size: 24px; margin: 0 auto 16px; display: flex;">🔑</span>
+    <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 6px;">OTP Verification</h2>
+    <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 20px;">
+      Enter the one-time verification passcode to activate your account.
+    </p>
+
+    {% if otp_hint %}
+      <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 8px; padding: 10px; margin-bottom: 20px;">
+        <span style="color: #34d399; font-weight: 700; font-size: 1.1rem; letter-spacing: 2px;">OTP: {{ otp_hint }}</span>
+      </div>
+    {% endif %}
+
+    <form action="{{ url_for('predict1') }}" method="POST">
+      <div class="cs-form-group" style="margin-bottom: 20px; text-align: left;">
+        <label class="cs-label" for="message">Verification Code</label>
+        <input class="cs-input" type="text" name="message" id="message" placeholder="Enter OTP code" required="required" style="text-align: center; font-size: 1.1rem; letter-spacing: 3px;" />
+      </div>
+
+      <button type="submit" class="cs-btn cs-btn-primary" style="width: 100%; justify-content: center;">
+        Verify & Continue &rarr;
+      </button>
+
+      <div style="margin-top: 18px; font-size: 0.85rem;">
+        <a href="/logon" style="color: var(--text-muted); text-decoration: none;">Back to Sign Up</a>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

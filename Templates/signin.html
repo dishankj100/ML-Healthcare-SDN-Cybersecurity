@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>Sign In - Cyber Shield</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body style="display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px;">
+  <div class="cs-card" style="width: 100%; max-width: 420px; padding: 36px 30px;">
+    <div style="text-align: center; margin-bottom: 28px;">
+      <span class="cs-brand-icon" style="width: 48px; height: 48px; font-size: 24px; margin: 0 auto 12px; display: flex;">🛡️</span>
+      <h2 style="font-size: 1.5rem; font-weight: 700;">Sign In</h2>
+      <p style="font-size: 0.88rem; color: var(--text-secondary); margin-top: 4px;">Healthcare SDN Intrusion Detection</p>
+    </div>
+    
+    <form action="/signin" method="GET">
+      <div class="cs-form-group" style="margin-bottom: 18px;">
+        <label class="cs-label" for="user">Username</label>
+        <input class="cs-input" type="text" name="user" id="user" placeholder="Enter username (e.g. admin)" required />
+      </div>
+
+      <div class="cs-form-group" style="margin-bottom: 24px;">
+        <label class="cs-label" for="password">Password</label>
+        <input class="cs-input" type="password" name="password" id="password" placeholder="Enter password (e.g. admin)" required />
+      </div>
+
+      <button type="submit" class="cs-btn cs-btn-primary" style="width: 100%; justify-content: center;">
+        Sign In
+      </button>
+
+      <div style="text-align: center; margin-top: 20px; font-size: 0.88rem; color: var(--text-secondary);">
+        Don't have an account? <a href="/logon" style="color: var(--accent-blue); text-decoration: none; font-weight: 600;">Sign Up</a>
+      </div>
+      <div style="text-align: center; margin-top: 10px; font-size: 0.82rem;">
+        <a href="/home" style="color: var(--text-muted); text-decoration: none;">Continue as Guest &rarr;</a>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

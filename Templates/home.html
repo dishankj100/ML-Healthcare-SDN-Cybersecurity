@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>CYBER SHIELD - Intrusion Detection System</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css?v=2" />
+
+  <style>
+    /* Inlined Core Theme For Instant Rendering & Zero-Cache Latency */
+    :root {
+      --bg-deep: #070a13;
+      --bg-surface: #0f172a;
+      --bg-card: rgba(17, 24, 39, 0.85);
+      --bg-input: rgba(15, 23, 42, 0.85);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --text-main: #f1f5f9;
+      --text-dim: #94a3b8;
+      --text-muted: #64748b;
+      --neon-blue: #3b82f6;
+      --neon-cyan: #06b6d4;
+      --neon-emerald: #10b981;
+      --neon-crimson: #ef4444;
+      --font-heading: 'Outfit', sans-serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-deep);
+      background-image:
+        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.1) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(139, 92, 246, 0.08) 0px, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cs-navbar {
+      background: rgba(11, 15, 25, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 16px 28px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .cs-navbar .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cs-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #fff;
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 1.35rem;
+    }
+
+    .cs-brand-shield {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .cs-live-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #34d399;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .cs-live-dot {
+      width: 7px;
+      height: 7px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #10b981;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(0.95);
+        opacity: 0.8;
+      }
+
+      50% {
+        transform: scale(1.3);
+        opacity: 1;
+      }
+
+      100% {
+        transform: scale(0.95);
+        opacity: 0.8;
+      }
+    }
+
+    .cs-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      list-style: none;
+    }
+
+    .cs-nav-link {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 10px;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+
+    .cs-nav-link:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .cs-nav-link.active {
+      color: #fff;
+      background: rgba(59, 130, 246, 0.16);
+      border-color: rgba(59, 130, 246, 0.4);
+      box-shadow: 0 0 16px rgba(59, 130, 246, 0.2);
+    }
+
+    .cs-nav-btn {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #fff !important;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 2px 10px rgba(37, 99, 235, 0.35);
+    }
+
+    .cs-nav-btn:hover {
+      background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+      transform: translateY(-1px);
+    }
+
+    .cs-hero {
+      padding: 56px 20px 36px;
+      text-align: center;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .cs-hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(59, 130, 246, 0.12);
+      color: #93c5fd;
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      padding: 6px 16px;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      box-shadow: 0 0 16px rgba(59, 130, 246, 0.15);
+    }
+
+    .cs-hero-title {
+      font-family: var(--font-heading);
+      font-size: 2.85rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 16px;
+      color: #ffffff;
+    }
+
+    .cs-hero-subtitle {
+      font-size: 1.12rem;
+      color: var(--text-dim);
+      max-width: 720px;
+      margin: 0 auto 28px;
+      line-height: 1.7;
+    }
+
+    .cs-pill-group {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .cs-pill {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      padding: 7px 16px;
+      border-radius: 9999px;
+      backdrop-filter: blur(8px);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .cs-main-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px 60px;
+      flex: 1;
+    }
+
+    .cs-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 38px 40px;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      margin-bottom: 36px;
+      position: relative;
+    }
+
+    .cs-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.8), rgba(6, 182, 212, 0.8), transparent);
+    }
+
+    .cs-card-header {
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 22px;
+      margin-bottom: 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .cs-card-title {
+      font-family: var(--font-heading);
+      font-size: 1.45rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .cs-card-subtitle {
+      font-size: 0.92rem;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
+
+    .cs-presets {
+      margin-bottom: 30px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px dashed rgba(59, 130, 246, 0.35);
+      padding: 18px 22px;
+      border-radius: 14px;
+    }
+
+    .cs-presets-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #94a3b8;
+      margin-bottom: 12px;
+      display: block;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .cs-presets-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .cs-preset-btn {
+      background: rgba(30, 41, 59, 0.85);
+      color: var(--text-main);
+      border: 1px solid var(--border-subtle);
+      padding: 9px 16px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .cs-preset-btn:hover {
+      background: rgba(51, 65, 85, 0.95);
+      border-color: var(--neon-cyan);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(6, 182, 212, 0.3);
+    }
+
+    .cs-form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 22px;
+    }
+
+    .cs-form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      padding: 16px 18px;
+      border-radius: 14px;
+      transition: all 0.2s ease;
+    }
+
+    .cs-form-group:hover,
+    .cs-form-group:focus-within {
+      border-color: rgba(59, 130, 246, 0.4);
+      background: rgba(255, 255, 255, 0.035);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    .cs-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cs-label-desc {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: var(--neon-cyan);
+      background: rgba(6, 182, 212, 0.12);
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+
+    .cs-input {
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 1.05rem;
+      font-family: var(--font-mono);
+      transition: all 0.2s ease;
+      width: 100%;
+    }
+
+    .cs-input:focus {
+      outline: none;
+      border-color: var(--neon-blue);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25), 0 0 16px rgba(59, 130, 246, 0.2);
+      background: rgba(15, 23, 42, 0.95);
+    }
+
+    .cs-form-actions {
+      margin-top: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 18px;
+    }
+
+    .cs-btn {
+      padding: 14px 34px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      font-family: var(--font-heading);
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .cs-btn-primary {
+      background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+      color: #fff;
+      box-shadow: 0 6px 22px rgba(37, 99, 235, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .cs-btn-primary:hover {
+      background: linear-gradient(135deg, #3b82f6 0%, #0891b2 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(6, 182, 212, 0.5);
+    }
+
+    .cs-footer {
+      border-top: 1px solid var(--border-subtle);
+      padding: 28px;
+      text-align: center;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-top: auto;
+      background: rgba(11, 15, 25, 0.6);
+    }
+
+    @media (max-width: 768px) {
+      .cs-hero-title {
+        font-size: 2.1rem;
+      }
+
+      .cs-card {
+        padding: 22px;
+      }
+
+      .cs-navbar .container {
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .cs-nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header / Navigation -->
+  <header class="cs-navbar">
+    <div class="container">
+      <a class="cs-brand" href="/home">
+        <span class="cs-brand-shield">🛡️</span>
+        <span>CYBER SHIELD</span>
+        <span class="cs-live-pill"><span class="cs-live-dot"></span> Online</span>
+      </a>
+      <ul class="cs-nav-links">
+        <li><a class="cs-nav-link active" href="/home">Detector</a></li>
+        <li><a class="cs-nav-link" href="/about">About</a></li>
+        <li><a class="cs-nav-link" href="/notebook">Notebook</a></li>
+        <li><a class="cs-nav-link cs-nav-btn" href="/login">Sign Out</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="cs-hero">
+    <div class="cs-hero-badge">Healthcare SDN Defense System</div>
+    <h1 class="cs-hero-title">Intrusion Detection Command</h1>
+    <p class="cs-hero-subtitle">
+      Real-time Software-Defined Network flow analysis powered by machine learning to detect and classify multi-vector
+      cyber threats in healthcare environments.
+    </p>
+    <div class="cs-pill-group">
+      <span class="cs-pill">🛡️ 9 Threat Classes</span>
+      <span class="cs-pill">⚡ OpenFlow Telemetry</span>
+    </div>
+  </section>
+
+  <!-- Main Content Card -->
+  <main class="cs-main-container">
+    <div class="cs-card">
+      <div class="cs-card-header">
+        <div>
+          <h2 class="cs-card-title">Network Flow Parameters</h2>
+          <p class="cs-card-subtitle">Input SDN telemetry switch features or click a quick-fill test scenario below.</p>
+        </div>
+      </div>
+
+      <!-- Quick Fill Test Presets -->
+      <div class="cs-presets">
+        <span class="cs-presets-label">⚡ 1-Click Test Scenarios:</span>
+        <div class="cs-presets-buttons">
+          <button type="button" class="cs-preset-btn" onclick="fillPreset('normal')">
+            🟢 Normal Traffic
+          </button>
+          <button type="button" class="cs-preset-btn" onclick="fillPreset('bruteforce')">
+            🔴 BruteForce Attack
+          </button>
+          <button type="button" class="cs-preset-btn" onclick="fillPreset('ddos')">
+            ⚡ UDP DDoS Storm
+          </button>
+          <button type="button" class="cs-preset-btn" onclick="fillPreset('sqli')">
+            🟣 SQL Injection
+          </button>
+          <button type="button" class="cs-preset-btn" onclick="fillPreset('probe')">
+            🔍 Port Scan (Probe)
+          </button>
+          <button type="button" class="cs-preset-btn" onclick="clearForm()" style="color: var(--text-muted);">
+            ✕ Clear
+          </button>
+        </div>
+      </div>
+
+      <!-- Detection Form -->
+      <form action="/predict" method="POST" id="predictForm">
+        <div class="cs-form-grid">
+
+          <div class="cs-form-group">
+            <label class="cs-label" for="f_0">
+              <span>IP Bytes</span>
+              <span class="cs-label-desc">ip_bytes</span>
+            </label>
+            <input class="cs-input" type="number" step="any" id="f_0" name="0" placeholder="e.g. 20448"
+              required="required" />
+          </div>
+
+          <div class="cs-form-group">
+            <label class="cs-label" for="f_1">
+              <span>IP Packets</span>
+              <span class="cs-label-desc">ip_packet</span>
+            </label>
+            <input class="cs-input" type="number" step="any" id="f_1" name="1" placeholder="e.g. 144"
+              required="required" />
+          </div>
+
+          <div class="cs-form-group">
+            <label class="cs-label" for="f_2">
+              <span>Port Bytes</span>
+              <span class="cs-label-desc">port_bytes</span>
+            </label>
+            <input class="cs-input" type="number" step="any" id="f_2" name="2" placeholder="e.g. 20448"
+              required="required" />
+          </div>
+
+          <div class="cs-form-group">
+            <label class="cs-label" for="f_3">
+              <span>Port Packets</span>
+              <span class="cs-label-desc">port_packet</span>
+            </label>
+            <input class="cs-input" type="number" step="any" id="f_3" name="3" placeholder="e.g. 144"
+              required="required" />
+          </div>
+
+          <div class="cs-form-group">
+            <label class="cs-label" for="f_4">
+              <span>Port Flow Count</span>
+              <span class="cs-label-desc">port_flow_count</span>
+            </label>
+            <input class="cs-input" type="number" step="any" id="f_4" name="4" placeholder="e.g. 1"
+              required="required" />
+          </div>
+
+          <div class="cs-form-group">
+            <label class="cs-label" for="f_5">
+              <span>Table Active Count</span>
+              <span class="cs-label-desc">table_active_count</span>
+            </label>
+            <input class="cs-input" type="number" step="any" id="f_5" name="5" placeholder="e.g. 2"
+              required="required" />
+          </div>
+
+          <div class="cs-form-group">
+            <label class="cs-label" for="f_6">
+              <span>Port RX Packets</span>
+              <span class="cs-label-desc">port_rx_packets</span>
+            </label>
+            <input class="cs-input" type="number" step="any" id="f_6" name="6" placeholder="e.g. 126302"
+              required="required" />
+          </div>
+
+          <div class="cs-form-group">
+            <label class="cs-label" for="f_7">
+              <span>Port RX Bytes</span>
+              <span class="cs-label-desc">port_rx_bytes</span>
+            </label>
+            <input class="cs-input" type="number" step="any" id="f_7" name="7" placeholder="e.g. 18268155"
+              required="required" />
+          </div>
+
+          <div class="cs-form-group">
+            <label class="cs-label" for="f_8">
+              <span>Port TX Bytes</span>
+              <span class="cs-label-desc">port_tx_bytes</span>
+            </label>
+            <input class="cs-input" type="number" step="any" id="f_8" name="8" placeholder="e.g. 13583786"
+              required="required" />
+          </div>
+
+        </div>
+
+        <div class="cs-form-actions">
+          <button type="submit" class="cs-btn cs-btn-primary">
+            🔍 Analyze Traffic Flow
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="cs-footer">
+    <p>Cyber Shield &bull; Healthcare SDN Cybersecurity Intrusion Detection System &bull; 2025</p>
+  </footer>
+
+  <script>
+    const PRESETS = {
+      normal: [20448, 144, 20448, 144, 1, 2, 126302, 18268155, 13583786],
+      bruteforce: [5414, 20, 14367, 31, 16, 14, 709113, 382759677, 164297378],
+      ddos: [744380, 10634, 744380, 10634, 1, 91, 11233, 775654, 6460946],
+      sqli: [299, 3, 2242, 19, 10, 12, 844234, 287989694, 2271209],
+      probe: [120, 2, 8572, 126, 195, 249, 1923991, 500660985, 22481993]
+    };
+
+    function fillPreset(key) {
+      const vals = PRESETS[key];
+      if (!vals) return;
+      for (let i = 0; i < 9; i++) {
+        const input = document.getElementById('f_' + i);
+        if (input) input.value = vals[i];
+      }
+    }
+
+    function clearForm() {
+      for (let i = 0; i < 9; i++) {
+        const input = document.getElementById('f_' + i);
+        if (input) input.value = '';
+      }
+    }
+  </script>
+</body>
+
+</html>
