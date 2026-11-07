@@ -10,6 +10,29 @@ An enterprise-grade, AI-powered **Security Operations Centre (SOC)** designed fo
 
 ---
 
+## 📌 Table of Contents
+
+- [Overview](#-overview)
+- [Core Modules](#-core-modules)
+- [Threat Classes Detected](#-threat-classes-detected)
+- [Project Directory Structure](#-project-directory-structure)
+- [How to Run Locally](#-how-to-run-locally)
+- [Live Demonstration Guide](#-live-demonstration-guide)
+- [Security Considerations](#-security-considerations)
+- [Future Enhancements](#-future-enhancements)
+- [Author & Team](#-author--team)
+- [License](#-license)
+
+---
+
+## 🔍 Overview
+
+Healthcare networks support mission-critical infrastructure including Electronic Health Records (EHRs), patient monitors, infusion pumps, pathology analyzers, and PACS servers. Protecting these connected medical devices (IoMT) against cyberattacks is essential for patient safety, HIPAA compliance, and clinical availability.
+
+**HealthGuard AI** bridges machine learning and Software-Defined Networking (SDN) to deliver proactive threat intelligence, sub-2ms intrusion classification, explainable AI explanations (TreeSHAP), and reactive flow-rule enforcement at switch line rates.
+
+---
+
 ## 🌟 Core Modules
 
 ### 📊 Module 1: Professional SOC Dashboard
@@ -60,7 +83,7 @@ An enterprise-grade, AI-powered **Security Operations Centre (SOC)** designed fo
   - **Test Set Accuracy**: 100.0% (1.0000)
   - **Weighted Precision**: 1.0000 | **Weighted Recall**: 1.0000 | **Weighted F1**: 1.0000
 - **Interactive 9x9 Confusion Matrix**: Heatmap displaying true positive counts across all classes with zero off-diagonal errors.
-- **Cross-Model Benchmark Table**: Original comparative analysis from `Notebook.ipynb` across 9 algorithms (Random Forest, XGBoost, Stacking, Voting, Decision Tree, KNN, Naive Bayes, AdaBoost, Logistic Regression).
+- **Cross-Model Benchmark Table**: Comparative analysis across 9 algorithms (Random Forest, XGBoost, Stacking, Voting, Decision Tree, KNN, Naive Bayes, AdaBoost, Logistic Regression).
 - **Scientific False-Positive Defense**: Detailed rationale explaining how OpenFlow hardware counters establish orthogonal decision boundaries on switch state invariants.
 
 ---
@@ -150,13 +173,27 @@ For step-by-step instructions, presentation scripts, timeline pacing, and antici
 
 ---
 
-## 📽️ Project Presentation & Defense Slides
-- **Presentation Deck**: [`HEALTHGUARD_AI_Major_Project_Presentation.pptx`](HEALTHGUARD_AI_Major_Project_Presentation.pptx) (High-DPI slides with real dashboard UI screenshots, ML evaluation heatmaps, and TreeSHAP waterfall charts)
-- **Slide Generator**: Run `python generate_final_ppt.py` to regenerate or customize the presentation deck.
+## 🔐 Security Considerations
+
+Because this project focuses on healthcare network security, deployment should account for the sensitivity and availability requirements of clinical systems:
+
+- **Protect Patient Data**: Avoid exposing identifiable patient records or clinical metrics in dashboards or public logs.
+- **Defense in Depth**: Machine learning IDS acts as an intelligent detection layer complementary to stateful firewalls, access controls, and TLS encryption.
+- **Fail-Safe SDN Policies**: SDN flow modification rules should include fail-open safeguards for life-support systems (ICU monitors, infusion pumps) to avoid denial of care.
+- **Model Integrity**: Ensure trained model artifacts (`model.sav`) are verified and loaded only from trusted sources.
 
 ---
 
-## 👨‍💻 Project Team & Author
+## 🔮 Future Enhancements
+
+- Integration with live physical/virtual SDN switches via Ryu OpenFlow controller REST APIs.
+- Streaming telemetry ingestion via Kafka or gRPC from Open vSwitch (OVS).
+- Online active learning loop for zero-day threat retraining.
+- Federated learning architecture across distributed hospital network branches.
+
+---
+
+## 👨‍💻 Author & Team
 
 **Dishank Jain**
 - GitHub: [@dishankj100](https://github.com/dishankj100)
