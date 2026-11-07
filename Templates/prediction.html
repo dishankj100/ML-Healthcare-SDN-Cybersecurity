@@ -325,6 +325,7 @@
         <span class="cs-live-pill"><span class="cs-live-dot"></span> Online</span>
       </a>
       <ul class="cs-nav-links">
+        <li><a class="cs-nav-link" href="/soc" style="color: var(--neon-cyan); font-weight: 700;">🛡️ HealthGuard SOC</a></li>
         <li><a class="cs-nav-link" href="/home">Home</a></li>
         <li><a class="cs-nav-link active" href="/home">Detector</a></li>
         <li><a class="cs-nav-link" href="/about">About</a></li>
@@ -356,7 +357,7 @@
           </p>
           <div class="cs-result-actions">
             <a href="/home" class="cs-btn cs-btn-primary">← Test Another Flow Sample</a>
-            <a href="/notebook" class="cs-btn cs-btn-secondary">View Model Metrics</a>
+            <a href="/soc" class="cs-btn cs-btn-secondary">View SOC Operations</a>
           </div>
         </div>
       {% else %}
@@ -368,8 +369,9 @@
             Security threat patterns identified in flow telemetry matching known attack signatures. Recommend immediate SDN controller rule inspection and flow-table mitigation.
           </p>
           <div class="cs-result-actions">
-            <a href="/home" class="cs-btn cs-btn-primary">← Test Another Flow Sample</a>
-            <a href="/about" class="cs-btn cs-btn-secondary">Threat Classification Guide</a>
+            <a href="/soc" class="cs-btn cs-btn-primary" style="background: linear-gradient(135deg, #dc2626, #ef4444);">🚨 Triage Incident in SOC &rarr;</a>
+            <a href="/home" class="cs-btn cs-btn-secondary">← Test Another Flow</a>
+            <a href="/about" class="cs-btn cs-btn-secondary">Threat Guide</a>
           </div>
         </div>
       {% endif %}

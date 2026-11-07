@@ -1,0 +1,2640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>HEALTHGUARD AI - Healthcare SDN Security Operations Centre</title>
+
+  <!-- Google Fonts with Graceful System Fallback -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       HEALTHGUARD AI - Enterprise Dark Cybersecurity SOC Design System
+       Palette: Deep Obsidian Navy, Electric Cyan, Emerald, Crimson, Amber
+       ========================================================================== */
+    :root {
+      --bg-deep: #060a17;
+      --bg-surface: #0b1226;
+      --bg-card: rgba(15, 23, 42, 0.85);
+      --bg-card-hover: rgba(22, 33, 62, 0.95);
+      --bg-input: rgba(11, 18, 38, 0.9);
+      --bg-elevated: #101c38;
+      
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(59, 130, 246, 0.35);
+      --border-cyan: rgba(6, 182, 212, 0.4);
+      --border-crimson: rgba(239, 68, 68, 0.4);
+
+      --text-main: #f1f5f9;
+      --text-dim: #94a3b8;
+      --text-muted: #64748b;
+
+      --neon-cyan: #06b6d4;
+      --neon-cyan-glow: rgba(6, 182, 212, 0.25);
+      --neon-blue: #3b82f6;
+      --neon-blue-glow: rgba(59, 130, 246, 0.25);
+      --neon-emerald: #10b981;
+      --neon-emerald-glow: rgba(16, 185, 129, 0.2);
+      --neon-crimson: #ef4444;
+      --neon-crimson-glow: rgba(239, 68, 68, 0.25);
+      --neon-amber: #f59e0b;
+      --neon-purple: #a855f7;
+
+      --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', "Courier New", monospace;
+
+      --sidebar-width: 270px;
+      --header-height: 70px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-deep);
+      background-image:
+        radial-gradient(at 10% 10%, rgba(59, 130, 246, 0.12) 0px, transparent 45%),
+        radial-gradient(at 90% 20%, rgba(6, 182, 212, 0.08) 0px, transparent 40%),
+        radial-gradient(at 50% 90%, rgba(168, 85, 247, 0.06) 0px, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(11, 18, 38, 0.6);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(59, 130, 246, 0.3);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--neon-cyan);
+    }
+
+    /* Layout Structure */
+    .soc-layout {
+      display: flex;
+      min-height: 100vh;
+      width: 100%;
+    }
+
+    /* ==========================================================================
+       SIDEBAR NAVIGATION
+       ========================================================================== */
+    .soc-sidebar {
+      width: var(--sidebar-width);
+      background: rgba(11, 18, 38, 0.95);
+      backdrop-filter: blur(20px);
+      border-right: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 1000;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .soc-brand {
+      padding: 22px 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border-bottom: 1px solid var(--border-subtle);
+      text-decoration: none;
+      color: #fff;
+    }
+
+    .soc-brand-shield {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #1d4ed8 0%, #06b6d4 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 0 20px rgba(6, 182, 212, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      flex-shrink: 0;
+    }
+
+    .soc-brand-info h1 {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      line-height: 1.2;
+      background: linear-gradient(90deg, #ffffff 40%, #93c5fd 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .soc-brand-info span {
+      font-size: 0.72rem;
+      color: var(--neon-cyan);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-family: var(--font-mono);
+    }
+
+    .soc-nav-section-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 18px 24px 8px;
+    }
+
+    .soc-nav-list {
+      list-style: none;
+      padding: 0 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .soc-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 16px;
+      border-radius: 10px;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .soc-nav-item:hover {
+      background: rgba(255, 255, 255, 0.04);
+      color: #fff;
+      transform: translateX(2px);
+    }
+
+    .soc-nav-item.active {
+      background: rgba(59, 130, 246, 0.15);
+      color: #fff;
+      border-color: rgba(59, 130, 246, 0.4);
+      box-shadow: 0 0 18px rgba(59, 130, 246, 0.2);
+    }
+
+    .soc-nav-icon {
+      font-size: 1.15rem;
+      width: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .soc-nav-badge {
+      margin-left: auto;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 9999px;
+      background: rgba(239, 68, 68, 0.2);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.35);
+    }
+
+    .soc-sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border-subtle);
+      background: rgba(6, 10, 23, 0.6);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .soc-sidebar-model-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.74rem;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      background: rgba(255, 255, 255, 0.03);
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    /* ==========================================================================
+       MAIN CONTENT CONTAINER
+       ========================================================================== */
+    .soc-main {
+      margin-left: var(--sidebar-width);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    /* Top Bar */
+    .soc-topbar {
+      height: var(--header-height);
+      background: rgba(11, 18, 38, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 900;
+    }
+
+    .soc-topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .soc-topbar-title {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .soc-sim-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #34d399;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .soc-sim-dot {
+      width: 7px;
+      height: 7px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #10b981;
+      animation: pulse-dot 2s infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { transform: scale(0.9); opacity: 0.8; }
+      50% { transform: scale(1.3); opacity: 1; }
+    }
+
+    .soc-topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .soc-kpi-pill {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 6px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.8rem;
+    }
+
+    .soc-kpi-pill strong {
+      color: var(--neon-cyan);
+      font-family: var(--font-mono);
+    }
+
+    .soc-threat-alert-pill {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #f87171;
+      padding: 6px 14px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      font-family: var(--font-mono);
+    }
+
+    .soc-btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      font-family: var(--font-heading);
+    }
+
+    .soc-btn-primary {
+      background: linear-gradient(135deg, #2563eb, #06b6d4);
+      color: #fff;
+      box-shadow: 0 0 16px rgba(37, 99, 235, 0.35);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .soc-btn-primary:hover {
+      background: linear-gradient(135deg, #3b82f6, #0891b2);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(6, 182, 212, 0.45);
+    }
+
+    .soc-btn-secondary {
+      background: rgba(30, 41, 59, 0.8);
+      color: var(--text-main);
+      border-color: var(--border-subtle);
+    }
+
+    .soc-btn-secondary:hover {
+      background: rgba(51, 65, 85, 0.9);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .soc-btn-danger {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border-color: rgba(239, 68, 68, 0.4);
+    }
+
+    .soc-btn-danger:hover {
+      background: rgba(239, 68, 68, 0.3);
+      border-color: #ef4444;
+      color: #fff;
+    }
+
+    .soc-btn-sm {
+      padding: 5px 12px;
+      font-size: 0.78rem;
+    }
+
+    /* Content Area & Modules */
+    .soc-content {
+      padding: 28px 32px 60px;
+      flex: 1;
+    }
+
+    .soc-module {
+      display: none;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    .soc-module.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Cards */
+    .soc-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 24px;
+      position: relative;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    .soc-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .soc-card-title {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .soc-card-subtitle {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      margin-top: 3px;
+    }
+
+    /* Grids */
+    .soc-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .soc-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(460px, 1fr));
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .soc-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    /* Stat Cards */
+    .soc-stat-card {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+
+    .soc-stat-card:hover {
+      border-color: rgba(59, 130, 246, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .soc-stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--neon-blue);
+    }
+
+    .soc-stat-card.stat-crimson::before { background: var(--neon-crimson); }
+    .soc-stat-card.stat-emerald::before { background: var(--neon-emerald); }
+    .soc-stat-card.stat-cyan::before { background: var(--neon-cyan); }
+    .soc-stat-card.stat-amber::before { background: var(--neon-amber); }
+
+    .soc-stat-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .soc-stat-value {
+      font-family: var(--font-heading);
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+
+    .soc-stat-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Notice Banner */
+    .soc-banner-notice {
+      background: rgba(6, 182, 212, 0.08);
+      border: 1px dashed rgba(6, 182, 212, 0.35);
+      border-radius: 12px;
+      padding: 12px 18px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 0.84rem;
+      color: #cbd5e1;
+    }
+
+    .soc-banner-notice strong {
+      color: var(--neon-cyan);
+    }
+
+    /* Tables */
+    .soc-table-wrapper {
+      overflow-x: auto;
+      border-radius: 10px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .soc-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.86rem;
+    }
+
+    .soc-table th {
+      background: rgba(11, 18, 38, 0.9);
+      color: var(--text-dim);
+      font-weight: 600;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.74rem;
+    }
+
+    .soc-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      color: var(--text-main);
+    }
+
+    .soc-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* Badges & Status */
+    .soc-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      font-family: var(--font-mono);
+    }
+
+    .soc-badge-critical {
+      background: rgba(239, 68, 68, 0.18);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+    }
+
+    .soc-badge-high {
+      background: rgba(249, 115, 22, 0.18);
+      color: #fdba74;
+      border: 1px solid rgba(249, 115, 22, 0.4);
+    }
+
+    .soc-badge-medium {
+      background: rgba(234, 179, 8, 0.18);
+      color: #fde047;
+      border: 1px solid rgba(234, 179, 8, 0.4);
+    }
+
+    .soc-badge-safe {
+      background: rgba(16, 185, 129, 0.18);
+      color: #6ee7b7;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+
+    .soc-badge-status-open {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.35);
+    }
+
+    .soc-badge-status-mitigated {
+      background: rgba(59, 130, 246, 0.15);
+      color: #93c5fd;
+      border: 1px solid rgba(59, 130, 246, 0.35);
+    }
+
+    .soc-badge-status-contained {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fcd34d;
+      border: 1px solid rgba(245, 158, 11, 0.35);
+    }
+
+    .soc-badge-status-resolved {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+
+    /* Scenario Buttons Grid in Module 2 */
+    .scenario-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .scenario-card {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+      text-align: left;
+    }
+
+    .scenario-card:hover {
+      border-color: var(--neon-cyan);
+      background: rgba(22, 33, 62, 0.9);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(6, 182, 212, 0.25);
+    }
+
+    .scenario-card.active {
+      border-color: var(--neon-cyan);
+      background: rgba(6, 182, 212, 0.12);
+      box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+    }
+
+    .scenario-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .scenario-title {
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: #fff;
+    }
+
+    .scenario-sub {
+      font-size: 0.76rem;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+    }
+
+    .scenario-target {
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      color: var(--neon-cyan);
+      background: rgba(6, 182, 212, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    /* Simulation Execution Pipeline Box */
+    .sim-pipeline {
+      background: rgba(11, 18, 38, 0.85);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 24px;
+    }
+
+    .sim-steps {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      margin: 20px 0 24px;
+    }
+
+    .sim-steps::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 10%;
+      right: 10%;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.1);
+      z-index: 1;
+      transform: translateY(-50%);
+    }
+
+    .sim-step {
+      position: relative;
+      z-index: 2;
+      background: var(--bg-surface);
+      border: 2px solid var(--border-subtle);
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .sim-step.active {
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 20px var(--neon-cyan);
+      background: rgba(6, 182, 212, 0.2);
+    }
+
+    .sim-step.done {
+      border-color: var(--neon-emerald);
+      color: #34d399;
+      background: rgba(16, 185, 129, 0.2);
+    }
+
+    /* Result Showcase Card */
+    .prediction-showcase {
+      border-radius: 14px;
+      padding: 24px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(15, 23, 42, 0.9);
+      margin-top: 20px;
+      display: none;
+    }
+
+    .prediction-showcase.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .prediction-header-grid {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .prediction-verdict {
+      font-family: var(--font-heading);
+      font-size: 1.65rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .probability-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 16px 0;
+    }
+
+    .prob-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.8rem;
+    }
+
+    .prob-bar-label {
+      width: 140px;
+      font-weight: 500;
+      color: var(--text-dim);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .prob-bar-track {
+      flex: 1;
+      height: 9px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 9999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .prob-bar-fill {
+      height: 100%;
+      border-radius: 9999px;
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .prob-bar-val {
+      width: 55px;
+      text-align: right;
+      font-family: var(--font-mono);
+      font-weight: 600;
+    }
+
+    /* SHAP Waterfall / Feature Importance Items */
+    .shap-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      margin-bottom: 8px;
+      font-size: 0.84rem;
+    }
+
+    .shap-feature-name {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      color: #e2e8f0;
+      width: 170px;
+    }
+
+    .shap-feature-val {
+      font-family: var(--font-mono);
+      color: var(--neon-cyan);
+      font-size: 0.78rem;
+    }
+
+    .shap-bar-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      height: 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 4px;
+      margin: 0 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shap-bar-pos {
+      height: 100%;
+      background: linear-gradient(90deg, #ef4444, #f87171);
+      border-radius: 4px;
+    }
+
+    .shap-bar-neg {
+      height: 100%;
+      background: linear-gradient(90deg, #10b981, #34d399);
+      border-radius: 4px;
+    }
+
+    .shap-score {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.82rem;
+      width: 70px;
+      text-align: right;
+    }
+
+    /* Network Topology Container */
+    .topology-container {
+      width: 100%;
+      height: 600px;
+      background: radial-gradient(circle at center, rgba(16, 28, 56, 0.7) 0%, rgba(6, 10, 23, 0.95) 100%);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .topology-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .topo-node {
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .topo-node:hover circle {
+      stroke: var(--neon-cyan);
+      stroke-width: 3px;
+      filter: drop-shadow(0 0 10px rgba(6, 182, 212, 0.8));
+    }
+
+    .topo-node.attacked circle {
+      stroke: #ef4444 !important;
+      fill: rgba(239, 68, 68, 0.25) !important;
+      animation: pulse-attack 1.2s infinite;
+    }
+
+    @keyframes pulse-attack {
+      0%, 100% { stroke-width: 3px; filter: drop-shadow(0 0 8px #ef4444); }
+      50% { stroke-width: 6px; filter: drop-shadow(0 0 20px #ef4444); }
+    }
+
+    .topo-inspector {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 310px;
+      background: rgba(11, 18, 38, 0.92);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      z-index: 10;
+      display: none;
+    }
+
+    .topo-inspector.open {
+      display: block;
+      animation: fadeIn 0.2s ease;
+    }
+
+    /* Confusion Matrix Heatmap */
+    .matrix-wrapper {
+      overflow-x: auto;
+      padding: 10px 0;
+    }
+
+    .matrix-table {
+      border-collapse: collapse;
+      margin: 0 auto;
+      font-size: 0.76rem;
+      font-family: var(--font-mono);
+    }
+
+    .matrix-table th, .matrix-table td {
+      width: 48px;
+      height: 44px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      position: relative;
+    }
+
+    .matrix-table th {
+      background: rgba(11, 18, 38, 0.9);
+      color: var(--text-dim);
+      font-weight: 600;
+      padding: 6px;
+    }
+
+    .matrix-cell-hit {
+      background: rgba(16, 185, 129, 0.25);
+      color: #34d399;
+      font-weight: 700;
+    }
+
+    .matrix-cell-hit:hover {
+      background: rgba(16, 185, 129, 0.45);
+    }
+
+    .matrix-cell-zero {
+      color: var(--text-muted);
+      opacity: 0.4;
+    }
+
+    /* Modal */
+    .soc-modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: 20px;
+    }
+
+    .soc-modal-backdrop.open {
+      display: flex;
+    }
+
+    .soc-modal {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-glow);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 580px;
+      padding: 28px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+      position: relative;
+    }
+
+    .soc-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .rule-code-box {
+      background: rgba(6, 10, 23, 0.9);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--neon-cyan);
+      word-break: break-all;
+      margin: 16px 0;
+      line-height: 1.6;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .soc-sidebar {
+        transform: translateX(-100%);
+      }
+      .soc-sidebar.open {
+        transform: translateX(0);
+      }
+      .soc-main {
+        margin-left: 0;
+      }
+      .soc-grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="soc-layout">
+
+    <!-- ======================================================================
+         SIDEBAR NAVIGATION
+         ====================================================================== -->
+    <aside class="soc-sidebar" id="socSidebar">
+      <a class="soc-brand" href="/soc">
+        <div class="soc-brand-shield">🛡️</div>
+        <div class="soc-brand-info">
+          <h1>HEALTHGUARD AI</h1>
+          <span>Healthcare SDN SOC</span>
+        </div>
+      </a>
+
+      <div class="soc-nav-section-title">Operations Console</div>
+      <ul class="soc-nav-list">
+        <li>
+          <div class="soc-nav-item active" onclick="switchModule('dashboard')">
+            <span class="soc-nav-icon">📊</span>
+            <span>SOC Dashboard</span>
+          </div>
+        </li>
+        <li>
+          <div class="soc-nav-item" onclick="switchModule('simulation')">
+            <span class="soc-nav-icon">⚡</span>
+            <span>Attack Simulation Lab</span>
+            <span class="soc-nav-badge">9 Vectors</span>
+          </div>
+        </li>
+        <li>
+          <div class="soc-nav-item" onclick="switchModule('xai')">
+            <span class="soc-nav-icon">🧠</span>
+            <span>Explainable AI (XAI)</span>
+          </div>
+        </li>
+        <li>
+          <div class="soc-nav-item" onclick="switchModule('incidents')">
+            <span class="soc-nav-icon">🚨</span>
+            <span>Incident Response</span>
+            <span class="soc-nav-badge" id="navThreatBadge">0</span>
+          </div>
+        </li>
+        <li>
+          <div class="soc-nav-item" onclick="switchModule('topology')">
+            <span class="soc-nav-icon">🌐</span>
+            <span>Hospital Topology</span>
+          </div>
+        </li>
+        <li>
+          <div class="soc-nav-item" onclick="switchModule('evaluation')">
+            <span class="soc-nav-icon">📈</span>
+            <span>ML Model Evaluation</span>
+          </div>
+        </li>
+
+        <div class="soc-nav-section-title">System & Tools</div>
+        <li>
+          <a class="soc-nav-item" href="/home">
+            <span class="soc-nav-icon">🔬</span>
+            <span>Flow Detector Form</span>
+          </a>
+        </li>
+        <li>
+          <a class="soc-nav-item" href="/notebook">
+            <span class="soc-nav-icon">📓</span>
+            <span>Research Notebook</span>
+          </a>
+        </li>
+        <li>
+          <a class="soc-nav-item" href="/about">
+            <span class="soc-nav-icon">ℹ️</span>
+            <span>System Architecture</span>
+          </a>
+        </li>
+        <li>
+          <a class="soc-nav-item" href="/classic">
+            <span class="soc-nav-icon">🏛️</span>
+            <span>Classic Landing</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="soc-sidebar-footer">
+        <div class="soc-sidebar-model-badge">
+          <span>🌲</span>
+          <div>
+            <div style="color: #fff; font-weight: 600;">Random Forest (100)</div>
+            <div style="font-size: 0.68rem; color: #34d399;">Model loaded &middot; Acc: 100%</div>
+          </div>
+        </div>
+        <div style="font-size: 0.72rem; color: var(--text-muted); text-align: center;">
+          HealthGuard AI v2.5 &middot; 2026
+        </div>
+      </div>
+    </aside>
+
+    <!-- ======================================================================
+         MAIN CONTENT AREA
+         ====================================================================== -->
+    <main class="soc-main">
+
+      <!-- TOPBAR -->
+      <header class="soc-topbar">
+        <div class="soc-topbar-left">
+          <button class="soc-btn soc-btn-secondary soc-btn-sm" onclick="toggleSidebar()" style="display: none;" id="sidebarToggleBtn">
+            ☰ Menu
+          </button>
+          <div class="soc-topbar-title">
+            <span id="currentModuleTitle">SOC Overview Dashboard</span>
+          </div>
+          <div class="soc-sim-pill">
+            <span class="soc-sim-dot"></span>
+            <span>Simulated Telemetry Stream</span>
+          </div>
+        </div>
+
+        <div class="soc-topbar-right">
+          <div class="soc-kpi-pill">
+            <span>SDN Controller:</span>
+            <strong>Ryu v4.34 / OF 1.3</strong>
+          </div>
+          <div class="soc-threat-alert-pill" id="topbarThreatPill">
+            <span>Active Threats:</span>
+            <strong id="topbarThreatCount">0</strong>
+          </div>
+          <button class="soc-btn soc-btn-secondary soc-btn-sm" onclick="resetDemoData()" title="Reset incidents to baseline for a clean demonstration">
+            ↺ Reset Demo
+          </button>
+          <button class="soc-btn soc-btn-primary soc-btn-sm" onclick="switchModule('simulation')">
+            ⚡ Attack Lab
+          </button>
+        </div>
+      </header>
+
+      <!-- CONTENT CONTAINER -->
+      <div class="soc-content">
+
+        <!-- SIMULATED DEMO BANNER -->
+        <div class="soc-banner-notice">
+          <span style="font-size: 1.3rem;">ℹ️</span>
+          <div>
+            <strong>Demonstration Mode:</strong>
+            Network telemetry, device states, and mitigation rules are simulated using authentic feature records from the healthcare MCAD-SDN benchmark dataset. Real machine learning predictions and exact TreeSHAP values are calculated live by the deployed Random Forest classifier.
+          </div>
+        </div>
+
+        <!-- ==================================================================
+             MODULE 1: PROFESSIONAL SOC DASHBOARD
+             ================================================================== -->
+        <section class="soc-module active" id="mod-dashboard">
+          <!-- KPI Statistics -->
+          <div class="soc-grid-4">
+            <div class="soc-stat-card stat-cyan">
+              <div class="soc-stat-label">
+                <span>Total Flows Inspected</span>
+                <span>⚡</span>
+              </div>
+              <div class="soc-stat-value" id="kpiTotalFlows">123,533</div>
+              <div class="soc-stat-sub">
+                <span style="color: #34d399;">● Live Telemetry</span>
+                <span>Latency: 1.1 ms</span>
+              </div>
+            </div>
+
+            <div class="soc-stat-card stat-crimson">
+              <div class="soc-stat-label">
+                <span>Active Threat Alerts</span>
+                <span>⚠️</span>
+              </div>
+              <div class="soc-stat-value" id="kpiActiveThreats" style="color: #f87171;">0</div>
+              <div class="soc-stat-sub">
+                <span>Requiring Operator Action</span>
+              </div>
+            </div>
+
+            <div class="soc-stat-card stat-emerald">
+              <div class="soc-stat-label">
+                <span>Mitigated Incidents</span>
+                <span>🛡️</span>
+              </div>
+              <div class="soc-stat-value" id="kpiMitigated" style="color: #34d399;">2</div>
+              <div class="soc-stat-sub">
+                <span>SDN OpenFlow Rules Enforced</span>
+              </div>
+            </div>
+
+            <div class="soc-stat-card stat-amber">
+              <div class="soc-stat-label">
+                <span>Network Security Health</span>
+                <span>❤️</span>
+              </div>
+              <div class="soc-stat-value" id="kpiHealthScore" style="color: #38bdf8;">100%</div>
+              <div class="soc-stat-sub">
+                <span>All 11 Hospital Assets Guarded</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts Row: Attack Distribution & Traffic Waveform -->
+          <div class="soc-grid-2">
+            <!-- Attack Distribution Chart -->
+            <div class="soc-card">
+              <div class="soc-card-header">
+                <div>
+                  <h3 class="soc-card-title">Threat Vector Distribution</h3>
+                  <p class="soc-card-subtitle">Classification breakdown across 9 network intrusion categories</p>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-around; flex-wrap: wrap; gap: 20px;">
+                <div style="width: 220px; height: 220px; position: relative;">
+                  <svg id="donutSvg" viewBox="0 0 200 200" style="width: 100%; height: 100%; transform: rotate(-90deg);"></svg>
+                  <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none;">
+                    <div style="font-size: 1.4rem; font-weight: 800; font-family: var(--font-heading);" id="donutCenterCount">3</div>
+                    <div style="font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase;">Incidents</div>
+                  </div>
+                </div>
+                <div id="donutLegend" style="display: flex; flex-direction: column; gap: 8px; font-size: 0.8rem;"></div>
+              </div>
+            </div>
+
+            <!-- Healthcare Asset Status -->
+            <div class="soc-card">
+              <div class="soc-card-header">
+                <div>
+                  <h3 class="soc-card-title">Critical Healthcare Device Telemetry</h3>
+                  <p class="soc-card-subtitle">Real-time status of clinical systems connected to OpenFlow SDN switches</p>
+                </div>
+                <button class="soc-btn soc-btn-secondary soc-btn-sm" onclick="switchModule('topology')">
+                  Open Topology &rarr;
+                </button>
+              </div>
+              <div class="soc-table-wrapper" style="max-height: 250px;">
+                <table class="soc-table">
+                  <thead>
+                    <tr>
+                      <th>Device Asset</th>
+                      <th>Department</th>
+                      <th>IP Address</th>
+                      <th>Protocol</th>
+                      <th>Security Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="deviceStatusTable">
+                    <!-- Populated via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Incidents Table -->
+          <div class="soc-card">
+            <div class="soc-card-header">
+              <div>
+                <h3 class="soc-card-title">Recent Security Incidents</h3>
+                <p class="soc-card-subtitle">Detected anomalies, attack classifications, and automated OpenFlow mitigations</p>
+              </div>
+              <button class="soc-btn soc-btn-secondary soc-btn-sm" onclick="switchModule('incidents')">
+                View All Incidents &rarr;
+              </button>
+            </div>
+            <div class="soc-table-wrapper">
+              <table class="soc-table">
+                <thead>
+                  <tr>
+                    <th>Incident ID</th>
+                    <th>Timestamp</th>
+                    <th>Attack Type</th>
+                    <th>Severity</th>
+                    <th>Source IP</th>
+                    <th>Target Asset</th>
+                    <th>Confidence</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="recentIncidentsTable">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             MODULE 2: ATTACK SIMULATION LAB
+             ================================================================== -->
+        <section class="soc-module" id="mod-simulation">
+          <div class="soc-card" style="margin-bottom: 24px;">
+            <div class="soc-card-header">
+              <div>
+                <h3 class="soc-card-title">Predefined Attack Simulation Scenarios</h3>
+                <p class="soc-card-subtitle">Select a verified test scenario containing ground-truth OpenFlow feature vectors from the dataset</p>
+              </div>
+              <span class="soc-badge soc-badge-safe">Dataset Ground Truth</span>
+            </div>
+
+            <div class="scenario-grid" id="scenarioGrid">
+              <!-- Populated via JS for all 9 classes -->
+            </div>
+          </div>
+
+          <!-- Active Simulation Control Deck -->
+          <div class="soc-card">
+            <div class="soc-card-header">
+              <div>
+                <h3 class="soc-card-title" id="selectedScenarioTitle">Select a scenario above</h3>
+                <p class="soc-card-subtitle" id="selectedScenarioSubtitle">Detailed OpenFlow switch telemetry will be fed to the trained machine learning model</p>
+              </div>
+              <button class="soc-btn soc-btn-primary" id="btnRunSimulation" onclick="runSimulation()">
+                ⚡ Execute Flow Injection & Inference
+              </button>
+            </div>
+
+            <p style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 20px;" id="selectedScenarioDesc">
+              Click any scenario card above to load its authentic switch telemetry features.
+            </p>
+
+            <!-- 9 Input Parameters Preview -->
+            <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-dim); margin-bottom: 10px; text-transform: uppercase;">
+              OpenFlow Flow Telemetry Parameters (9 Features):
+            </div>
+            <div class="soc-grid-3" id="telemetryFeaturesGrid">
+              <!-- Populated with inputs -->
+            </div>
+
+            <!-- Pipeline Visualizer -->
+            <div class="sim-pipeline" id="simPipeline">
+              <div style="font-size: 0.82rem; font-weight: 600; color: var(--text-dim); text-transform: uppercase;">
+                SDN Detection & Response Pipeline Execution:
+              </div>
+              <div class="sim-steps">
+                <div class="sim-step" id="step1" title="1. Ingress OpenFlow Packet Stream">📦</div>
+                <div class="sim-step" id="step2" title="2. OpenFlow Switch Flow-Table Lookup">🔀</div>
+                <div class="sim-step" id="step3" title="3. HealthGuard AI Random Forest Inference">🌲</div>
+                <div class="sim-step" id="step4" title="4. TreeSHAP Attribution Calculation">🧠</div>
+                <div class="sim-step" id="step5" title="5. Automated SDN Mitigation Dispatch">🛡️</div>
+              </div>
+              <div style="font-size: 0.8rem; color: var(--neon-cyan); font-family: var(--font-mono); text-align: center;" id="simPipelineStatus">
+                Awaiting simulation trigger...
+              </div>
+            </div>
+
+            <!-- Prediction Showcase Box -->
+            <div class="prediction-showcase" id="predictionShowcase">
+              <div class="prediction-header-grid">
+                <div>
+                  <span class="soc-badge" id="predSeverityBadge">SEVERITY</span>
+                  <div class="prediction-verdict" id="predVerdictText">Prediction Verdict</div>
+                  <div style="font-size: 0.85rem; color: var(--text-dim);" id="predCategoryText">Category details</div>
+                </div>
+                <div style="text-align: right;">
+                  <div style="font-size: 0.76rem; color: var(--text-muted); text-transform: uppercase;">Model Confidence</div>
+                  <div style="font-family: var(--font-heading); font-size: 2rem; font-weight: 800; color: #fff;" id="predConfidenceVal">100.0%</div>
+                  <div style="font-size: 0.74rem; font-family: var(--font-mono); color: #34d399;" id="predLatencyVal">Latency: 1.1 ms</div>
+                </div>
+              </div>
+
+              <!-- Probability Distribution Bars -->
+              <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-dim); text-transform: uppercase; margin-top: 16px;">
+                Random Forest Class Probability Distribution:
+              </div>
+              <div class="probability-bars" id="probBarsContainer"></div>
+
+              <!-- Incident Linkage Notice -->
+              <div id="simIncidentNotice" style="margin-top: 18px; padding: 12px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; font-size: 0.82rem; display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                  🚨 <strong>Incident Created:</strong> <span id="simIncidentId">INC-XXXX</span> &mdash; Added to Incident Response Centre.
+                </div>
+                <button class="soc-btn soc-btn-danger soc-btn-sm" onclick="switchModule('incidents')">
+                  Go to Incident Triage &rarr;
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             MODULE 3: EXPLAINABLE AI (XAI)
+             ================================================================== -->
+        <section class="soc-module" id="mod-xai">
+          <div class="soc-banner-notice" style="background: rgba(168, 85, 247, 0.08); border-color: rgba(168, 85, 247, 0.35);">
+            <span style="font-size: 1.3rem;">🧠</span>
+            <div>
+              <strong>Explainability Engine:</strong> TreeSHAP (Lundberg et al., Nature MI) calculates exact Shapley values across all 100 decision trees in the deployed Random Forest classifier. This reveals precisely how each OpenFlow switch counter influenced the intrusion classification.
+            </div>
+          </div>
+
+          <div class="soc-grid-2">
+            <!-- Global Feature Importance -->
+            <div class="soc-card">
+              <div class="soc-card-header">
+                <div>
+                  <h3 class="soc-card-title">Global Feature Importance</h3>
+                  <p class="soc-card-subtitle">Natively extracted from model.feature_importances_ (MDI)</p>
+                </div>
+                <span class="soc-badge soc-badge-safe">Trained Model Weights</span>
+              </div>
+
+              <div id="globalFeatureList" style="display: flex; flex-direction: column; gap: 10px;">
+                <!-- Populated via JS -->
+              </div>
+            </div>
+
+            <!-- Local SHAP Prediction Explanation -->
+            <div class="soc-card">
+              <div class="soc-card-header">
+                <div>
+                  <h3 class="soc-card-title">Local Prediction Attribution (SHAP)</h3>
+                  <p class="soc-card-subtitle">Feature impact breakdown for the active/latest simulated flow</p>
+                </div>
+                <span class="soc-badge soc-badge-safe" id="shapEngineBadge">TreeSHAP</span>
+              </div>
+
+              <div id="xaiNarrativeBox" style="padding: 14px; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle); border-radius: 10px; font-size: 0.84rem; color: #cbd5e1; margin-bottom: 18px; line-height: 1.6;">
+                Run a simulation in Module 2 or test a flow below to inspect its individual SHAP waterfall attribution.
+              </div>
+
+              <div style="font-size: 0.78rem; font-weight: 600; color: var(--text-dim); text-transform: uppercase; margin-bottom: 10px;">
+                Top Contributing Telemetry Features:
+              </div>
+              <div id="localShapList">
+                <!-- Populated via JS -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             MODULE 4: INCIDENT RESPONSE CENTRE
+             ================================================================== -->
+        <section class="soc-module" id="mod-incidents">
+          <div class="soc-card" style="margin-bottom: 24px;">
+            <div class="soc-card-header">
+              <div>
+                <h3 class="soc-card-title">Active Healthcare Security Incidents</h3>
+                <p class="soc-card-subtitle">Triaged alerts generated by the HealthGuard AI intrusion detection pipeline</p>
+              </div>
+              <div style="display: flex; gap: 10px;">
+                <select id="incidentStatusFilter" onchange="loadIncidents()" style="background: var(--bg-input); color: #fff; border: 1px solid var(--border-subtle); padding: 6px 12px; border-radius: 8px; font-size: 0.82rem;">
+                  <option value="">All Statuses</option>
+                  <option value="OPEN">Open Threats</option>
+                  <option value="MITIGATED">Mitigated</option>
+                  <option value="CONTAINED">Contained</option>
+                  <option value="RESOLVED">Resolved</option>
+                </select>
+                <button class="soc-btn soc-btn-secondary soc-btn-sm" onclick="loadIncidents()">↺ Refresh</button>
+              </div>
+            </div>
+
+            <div class="soc-table-wrapper">
+              <table class="soc-table">
+                <thead>
+                  <tr>
+                    <th>Incident ID</th>
+                    <th>Timestamp</th>
+                    <th>Threat Vector</th>
+                    <th>Severity</th>
+                    <th>Source IP</th>
+                    <th>Target Healthcare Asset</th>
+                    <th>Confidence</th>
+                    <th>Status</th>
+                    <th>Mitigation Actions (Simulated)</th>
+                  </tr>
+                </thead>
+                <tbody id="incidentsTableBody">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Audit Trail Log -->
+          <div class="soc-card">
+            <div class="soc-card-header">
+              <div>
+                <h3 class="soc-card-title">OpenFlow SDN Audit Trail & Enforcement Log</h3>
+                <p class="soc-card-subtitle">Immutable log recording every operator mitigation command and generated OpenFlow flow-mod rule</p>
+              </div>
+              <span class="soc-badge soc-badge-safe">SQLite Persistent</span>
+            </div>
+            <div class="soc-table-wrapper" style="max-height: 300px;">
+              <table class="soc-table">
+                <thead>
+                  <tr>
+                    <th>Timestamp</th>
+                    <th>Operator</th>
+                    <th>Action</th>
+                    <th>Incident ID</th>
+                    <th>Target</th>
+                    <th>Generated OpenFlow Flow-Mod Rule (Simulated)</th>
+                    <th>Result</th>
+                  </tr>
+                </thead>
+                <tbody id="auditLogTableBody">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             MODULE 5: INTERACTIVE HOSPITAL NETWORK TOPOLOGY
+             ================================================================== -->
+        <section class="soc-module" id="mod-topology">
+          <div class="soc-card">
+            <div class="soc-card-header">
+              <div>
+                <h3 class="soc-card-title">Interactive Hospital SDN Network Topology</h3>
+                <p class="soc-card-subtitle">Live representation of medical IoT devices, EHR databases, and OpenFlow switches</p>
+              </div>
+              <div style="display: flex; gap: 10px; align-items: center;">
+                <span class="soc-badge soc-badge-safe">● 11 Nodes Active</span>
+                <button class="soc-btn soc-btn-secondary soc-btn-sm" onclick="renderTopology()">↺ Reset View</button>
+              </div>
+            </div>
+
+            <!-- SVG Topology Canvas -->
+            <div class="topology-container" id="topoContainer">
+              <svg class="topology-svg" id="topologySvg" viewBox="0 0 1000 600"></svg>
+
+              <!-- Node Detail Inspector Drawer -->
+              <div class="topo-inspector" id="topoInspector">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 8px;">
+                  <strong style="font-family: var(--font-heading); font-size: 1rem;" id="inspNodeName">Asset Name</strong>
+                  <button onclick="closeInspector()" style="background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 1.1rem;">✕</button>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.8rem;">
+                  <div><span style="color: var(--text-dim);">Role:</span> <strong id="inspNodeRole" style="color: #fff;">-</strong></div>
+                  <div><span style="color: var(--text-dim);">Department:</span> <span id="inspNodeDept">-</span></div>
+                  <div><span style="color: var(--text-dim);">IP Address:</span> <code id="inspNodeIp" style="color: var(--neon-cyan);">-</code></div>
+                  <div><span style="color: var(--text-dim);">MAC Address:</span> <code id="inspNodeMac" style="color: var(--text-muted);">-</code></div>
+                  <div><span style="color: var(--text-dim);">Protocol:</span> <span id="inspNodeProto">-</span></div>
+                  <div><span style="color: var(--text-dim);">Security Status:</span> <span id="inspNodeStatus" class="soc-badge soc-badge-safe">HEALTHY</span></div>
+                  <div style="margin-top: 8px; font-size: 0.76rem; color: var(--text-dim); line-height: 1.5;" id="inspNodeDesc">-</div>
+                  <button class="soc-btn soc-btn-primary soc-btn-sm" style="margin-top: 10px; justify-content: center;" onclick="simulateAttackOnSelectedNode()">
+                    ⚡ Test Flow Against This Asset
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             MODULE 6: ML MODEL EVALUATION
+             ================================================================== -->
+        <section class="soc-module" id="mod-evaluation">
+          <!-- Summary Metrics -->
+          <div class="soc-grid-4">
+            <div class="soc-stat-card stat-emerald">
+              <div class="soc-stat-label">Test Set Accuracy</div>
+              <div class="soc-stat-value" style="color: #34d399;">100.0%</div>
+              <div class="soc-stat-sub">24,707 / 24,707 Correct</div>
+            </div>
+            <div class="soc-stat-card stat-cyan">
+              <div class="soc-stat-label">Weighted Precision</div>
+              <div class="soc-stat-value" style="color: #38bdf8;">1.0000</div>
+              <div class="soc-stat-sub">Macro Precision: 1.0000</div>
+            </div>
+            <div class="soc-stat-card stat-cyan">
+              <div class="soc-stat-label">Weighted Recall</div>
+              <div class="soc-stat-value" style="color: #38bdf8;">1.0000</div>
+              <div class="soc-stat-sub">Macro Recall: 1.0000</div>
+            </div>
+            <div class="soc-stat-card stat-emerald">
+              <div class="soc-stat-label">Weighted F1-Score</div>
+              <div class="soc-stat-value" style="color: #34d399;">1.0000</div>
+              <div class="soc-stat-sub">Zero False Positives</div>
+            </div>
+          </div>
+
+          <div class="soc-grid-2">
+            <!-- Confusion Matrix Heatmap -->
+            <div class="soc-card">
+              <div class="soc-card-header">
+                <div>
+                  <h3 class="soc-card-title">Test-Set Confusion Matrix (9x9)</h3>
+                  <p class="soc-card-subtitle">Evaluated on 24,707 holdout samples from processed.csv</p>
+                </div>
+                <span class="soc-badge soc-badge-safe">Ground Truth</span>
+              </div>
+
+              <div class="matrix-wrapper">
+                <table class="matrix-table" id="confusionMatrixTable">
+                  <!-- Populated via JS -->
+                </table>
+              </div>
+              <div style="font-size: 0.74rem; color: var(--text-muted); text-align: center; margin-top: 10px;">
+                Diagonal cells represent true positives across all 9 classes (0 to 8). Zero off-diagonal misclassifications.
+              </div>
+            </div>
+
+            <!-- Per-Class Performance Table -->
+            <div class="soc-card">
+              <div class="soc-card-header">
+                <div>
+                  <h3 class="soc-card-title">Per-Class Performance Breakdown</h3>
+                  <p class="soc-card-subtitle">Precision, recall, and support for all 9 attack classes</p>
+                </div>
+              </div>
+              <div class="soc-table-wrapper">
+                <table class="soc-table">
+                  <thead>
+                    <tr>
+                      <th>Class ID</th>
+                      <th>Class Name</th>
+                      <th>Precision</th>
+                      <th>Recall</th>
+                      <th>F1-Score</th>
+                      <th>Test Support</th>
+                    </tr>
+                  </thead>
+                  <tbody id="perClassTableBody">
+                    <!-- Populated via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Benchmark Cross-Model Comparison Table from Notebook -->
+          <div class="soc-card" style="margin-bottom: 24px;">
+            <div class="soc-card-header">
+              <div>
+                <h3 class="soc-card-title">Algorithm Benchmark Comparison (from Research Notebook)</h3>
+                <p class="soc-card-subtitle">Comprehensive evaluation across 9 machine learning & ensemble classifiers</p>
+              </div>
+              <span class="soc-badge soc-badge-safe">Notebook.ipynb Cell 60</span>
+            </div>
+            <div class="soc-table-wrapper">
+              <table class="soc-table">
+                <thead>
+                  <tr>
+                    <th>ML Algorithm</th>
+                    <th>Accuracy</th>
+                    <th>F1-Score</th>
+                    <th>Recall</th>
+                    <th>Precision</th>
+                    <th>Deployment Status</th>
+                  </tr>
+                </thead>
+                <tbody id="benchmarkTableBody">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Scientific Rationale & False-Positive Analysis -->
+          <div class="soc-card">
+            <div class="soc-card-header">
+              <div>
+                <h3 class="soc-card-title">Scientific False-Positive & Feature Invariant Analysis</h3>
+                <p class="soc-card-subtitle">Academic rationale for decision boundaries in OpenFlow switch telemetry</p>
+              </div>
+            </div>
+            <div style="font-size: 0.88rem; color: #cbd5e1; line-height: 1.7; display: flex; flex-direction: column; gap: 14px;">
+              <p>
+                <strong>Why High Performance is Achieved:</strong> In Software-Defined Networks (SDN), OpenFlow switches maintain hardware-level TCAM counters for <code>table_active_count</code>, <code>port_rx_bytes</code>, and <code>port_flow_count</code>. Under volumetric attacks (e.g. TCP SYN floods or UDP storms), active flow table entries explode from ~2 to >160 while byte/packet ratios drop sharply. Under port scans (Probe), flow rules rapidly cycle while payload bytes remain near zero. Random Forest isolates these orthogonal invariants with 100% precision.
+              </p>
+              <p>
+                <strong>False Positive Safeguards:</strong> In the test split of 1,976 normal clinical telemetry flows, 0 were misclassified as attacks (False Positive Rate = 0.00%). Normal clinical devices maintain strict byte-to-packet ratios and minimal active flow counts (<3 rules), completely eliminating false alarms on life-critical hospital monitors.
+              </p>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ======================================================================
+       SIMULATED MITIGATION MODAL
+       ====================================================================== -->
+  <div class="soc-modal-backdrop" id="mitigationModal">
+    <div class="soc-modal">
+      <div class="soc-modal-header">
+        <h3 style="font-family: var(--font-heading); font-size: 1.2rem; font-weight: 700;" id="modalActionTitle">
+          Execute Simulated SDN Mitigation
+        </h3>
+        <button onclick="closeMitigationModal()" style="background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 1.2rem;">✕</button>
+      </div>
+
+      <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 14px;" id="modalActionDesc">
+        Review the simulated OpenFlow flow-mod rule before dispatching to the virtual SDN controller.
+      </p>
+
+      <div style="font-size: 0.78rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">
+        Generated OpenFlow 1.3 Flow-Mod Rule (Simulated):
+      </div>
+      <div class="rule-code-box" id="modalRuleCode">
+        OFPFC_ADD priority=65535, match=(eth_type=0x0800, ipv4_src=198.51.100.42), actions=DROP
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px;">
+        <button class="soc-btn soc-btn-secondary" onclick="closeMitigationModal()">Cancel</button>
+        <button class="soc-btn soc-btn-primary" id="btnConfirmMitigation" onclick="confirmMitigationAction()">
+          Confirm & Push Rule
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       APPLICATION JAVASCRIPT LOGIC
+       ====================================================================== -->
+  <script>
+    // Global Application State
+    const AppState = {
+      activeModule: 'dashboard',
+      stats: {},
+      scenarios: {},
+      selectedScenarioId: 'tcp_ddos',
+      incidents: [],
+      auditLogs: [],
+      topology: null,
+      selectedTopoNode: null,
+      evaluation: null,
+      pendingAction: null
+    };
+
+    // Initialize application on DOM load
+    document.addEventListener('DOMContentLoaded', () => {
+      initApp();
+      // Auto-poll stats every 10 seconds for simulated real-time feeling
+      setInterval(loadStats, 10000);
+    });
+
+    async function initApp() {
+      await Promise.all([
+        loadStats(),
+        loadScenarios(),
+        loadIncidents(),
+        loadAuditLogs(),
+        loadTopology(),
+        loadEvaluation(),
+        loadGlobalFeatureImportance()
+      ]);
+    }
+
+    // Switch between the 6 modules
+    function switchModule(modId) {
+      AppState.activeModule = modId;
+      document.querySelectorAll('.soc-module').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.soc-nav-item').forEach(el => el.classList.remove('active'));
+
+      const targetMod = document.getElementById('mod-' + modId);
+      if (targetMod) targetMod.classList.add('active');
+
+      // Update sidebar nav active state
+      const navItems = document.querySelectorAll('.soc-nav-item');
+      const titles = {
+        dashboard: 'SOC Overview Dashboard',
+        simulation: 'Attack Simulation Lab',
+        xai: 'Explainable AI & SHAP Attribution',
+        incidents: 'Incident Response & Mitigation Centre',
+        topology: 'Hospital Network SDN Topology',
+        evaluation: 'Machine Learning Model Evaluation'
+      };
+
+      document.getElementById('currentModuleTitle').textContent = titles[modId] || 'HealthGuard AI SOC';
+
+      // Highlight active nav item
+      const map = {
+        dashboard: 0, simulation: 1, xai: 2, incidents: 3, topology: 4, evaluation: 5
+      };
+      if (navItems[map[modId]]) navItems[map[modId]].classList.add('active');
+
+      if (modId === 'topology') renderTopology();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Toggle mobile sidebar
+    function toggleSidebar() {
+      const sb = document.getElementById('socSidebar');
+      sb.classList.toggle('open');
+    }
+
+    // Load Threat Statistics
+    async function loadStats() {
+      try {
+        const res = await fetch('/api/stats');
+        const data = await res.json();
+        AppState.stats = data;
+
+        document.getElementById('kpiActiveThreats').textContent = data.active_threats;
+        document.getElementById('topbarThreatCount').textContent = data.active_threats;
+        document.getElementById('navThreatBadge').textContent = data.active_threats;
+        document.getElementById('kpiMitigated').textContent = data.mitigated_threats;
+        document.getElementById('kpiHealthScore').textContent = data.system_health_score + '%';
+
+        const alertPill = document.getElementById('topbarThreatPill');
+        if (data.active_threats > 0) {
+          alertPill.style.display = 'flex';
+          alertPill.style.borderColor = 'rgba(239, 68, 68, 0.6)';
+        } else {
+          alertPill.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+        }
+
+        renderDonutChart(data.attack_distribution, data.total_incidents_logged);
+      } catch (e) {
+        console.error('Error loading stats:', e);
+      }
+    }
+
+    // Load Predefined Scenarios
+    async function loadScenarios() {
+      try {
+        const res = await fetch('/api/scenarios');
+        const data = await res.json();
+        AppState.scenarios = data;
+
+        const grid = document.getElementById('scenarioGrid');
+        grid.innerHTML = '';
+
+        Object.keys(data).forEach(key => {
+          const sc = data[key];
+          const card = document.createElement('div');
+          card.className = `scenario-card ${key === AppState.selectedScenarioId ? 'active' : ''}`;
+          card.id = `scCard-${key}`;
+          card.onclick = () => selectScenario(key);
+
+          const sevBadge = sc.class_id === 2
+            ? '<span class="soc-badge soc-badge-safe">SAFE</span>'
+            : `<span class="soc-badge soc-badge-critical">ATTACK</span>`;
+
+          card.innerHTML = `
+            <div class="scenario-header">
+              <span class="scenario-title">${sc.title}</span>
+              ${sevBadge}
+            </div>
+            <div class="scenario-sub">${sc.subtitle}</div>
+            <span class="scenario-target">Target: ${sc.target_asset.split('(')[0]}</span>
+          `;
+          grid.appendChild(card);
+        });
+
+        // Initialize with default scenario
+        selectScenario(AppState.selectedScenarioId || 'tcp_ddos');
+      } catch (e) {
+        console.error('Error loading scenarios:', e);
+      }
+    }
+
+    // Select Scenario & Load Inputs
+    function selectScenario(key) {
+      AppState.selectedScenarioId = key;
+      const sc = AppState.scenarios[key];
+      if (!sc) return;
+
+      document.querySelectorAll('.scenario-card').forEach(el => el.classList.remove('active'));
+      const activeCard = document.getElementById(`scCard-${key}`);
+      if (activeCard) activeCard.classList.add('active');
+
+      document.getElementById('selectedScenarioTitle').textContent = sc.title;
+      document.getElementById('selectedScenarioSubtitle').textContent = sc.subtitle;
+      document.getElementById('selectedScenarioDesc').textContent = sc.description;
+
+      // Populate 9 feature inputs
+      const fNames = [
+        'ip_bytes', 'ip_packet', 'port_bytes', 'port_packet',
+        'port_flow_count', 'table_active_count', 'port_rx_packets',
+        'port_rx_bytes', 'port_tx_bytes'
+      ];
+      const featGrid = document.getElementById('telemetryFeaturesGrid');
+      featGrid.innerHTML = '';
+
+      fNames.forEach((name, idx) => {
+        const val = sc.features[idx];
+        const group = document.createElement('div');
+        group.style.background = 'rgba(255, 255, 255, 0.02)';
+        group.style.padding = '10px 14px';
+        group.style.borderRadius = '8px';
+        group.style.border = '1px solid rgba(255, 255, 255, 0.05)';
+        group.innerHTML = `
+          <label style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; font-family: var(--font-mono); display: block; margin-bottom: 4px;">
+            ${name}
+          </label>
+          <input type="number" step="any" id="f_input_${idx}" value="${val}"
+            style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-subtle); color: #fff; padding: 6px 10px; border-radius: 6px; font-family: var(--font-mono); font-size: 0.88rem;" />
+        `;
+        featGrid.appendChild(group);
+      });
+    }
+
+    // Run Simulation
+    async function runSimulation() {
+      const btn = document.getElementById('btnRunSimulation');
+      btn.disabled = true;
+      btn.innerHTML = '⏳ Simulating OpenFlow Packet Pipeline...';
+
+      const sc = AppState.scenarios[AppState.selectedScenarioId];
+      const features = [];
+      for (let i = 0; i < 9; i++) {
+        const input = document.getElementById(`f_input_${i}`);
+        features.push(input ? parseFloat(input.value) : 0.0);
+      }
+
+      // Step-by-step animation
+      const pipelineStatus = document.getElementById('simPipelineStatus');
+      const step1 = document.getElementById('step1');
+      const step2 = document.getElementById('step2');
+      const step3 = document.getElementById('step3');
+      const step4 = document.getElementById('step4');
+      const step5 = document.getElementById('step5');
+
+      [step1, step2, step3, step4, step5].forEach(s => {
+        s.className = 'sim-step';
+      });
+
+      step1.classList.add('active');
+      pipelineStatus.textContent = '1/5: OpenFlow switch port capturing packet flow...';
+      await new Promise(r => setTimeout(r, 200));
+
+      step1.className = 'sim-step done';
+      step2.classList.add('active');
+      pipelineStatus.textContent = '2/5: Extracting flow table TCAM counters and byte rates...';
+      await new Promise(r => setTimeout(r, 200));
+
+      step2.className = 'sim-step done';
+      step3.classList.add('active');
+      pipelineStatus.textContent = '3/5: Running inference across 100 Random Forest decision trees...';
+
+      try {
+        const res = await fetch('/api/predict_soc', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            features: features,
+            scenario_id: AppState.selectedScenarioId,
+            source_ip: sc ? sc.source_ip : '192.168.1.100',
+            dest_ip: sc ? sc.dest_ip : '10.0.1.15',
+            target_asset: sc ? sc.target_asset : 'Healthcare Network Asset'
+          })
+        });
+        const pred = await res.json();
+
+        step3.className = 'sim-step done';
+        step4.classList.add('active');
+        pipelineStatus.textContent = '4/5: Computing exact TreeSHAP feature contributions...';
+        await new Promise(r => setTimeout(r, 250));
+
+        step4.className = 'sim-step done';
+        step5.classList.add('active');
+        pipelineStatus.textContent = pred.class_id === 2
+          ? '5/5: Normal flow validated. Telemetry stream accepted.'
+          : '5/5: Threat detected! Automated SDN incident logged & quarantine rule prepared.';
+
+        // Render prediction showcase
+        renderPredictionShowcase(pred);
+
+        // Update local SHAP view in Module 3
+        if (pred.explanation) {
+          renderLocalShap(pred.explanation);
+        }
+
+        // Highlight targeted node in network topology
+        if (sc && sc.target_node_id && pred.class_id !== 2) {
+          highlightTopologyAttack(sc.target_node_id);
+        }
+
+        // Refresh stats and incidents list
+        loadStats();
+        loadIncidents();
+      } catch (e) {
+        console.error('Simulation error:', e);
+        pipelineStatus.textContent = 'Error executing simulation: ' + e.message;
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '⚡ Execute Flow Injection & Inference';
+      }
+    }
+
+    // Render Prediction Showcase Card
+    function renderPredictionShowcase(pred) {
+      const box = document.getElementById('predictionShowcase');
+      box.classList.add('show');
+
+      const sevBadge = document.getElementById('predSeverityBadge');
+      sevBadge.textContent = pred.severity;
+      sevBadge.className = `soc-badge soc-badge-${pred.severity.toLowerCase()}`;
+
+      const verdictText = document.getElementById('predVerdictText');
+      verdictText.textContent = pred.display_name;
+      verdictText.style.color = pred.color;
+
+      document.getElementById('predCategoryText').textContent =
+        `Category: ${pred.category} &middot; CVE/Ref: ${pred.cve} &middot; ${pred.description}`;
+
+      document.getElementById('predConfidenceVal').textContent = pred.confidence + '%';
+      document.getElementById('predLatencyVal').textContent = `Latency: ${pred.latency_ms} ms`;
+
+      // Probability bars
+      const probContainer = document.getElementById('probBarsContainer');
+      probContainer.innerHTML = '';
+      if (pred.probabilities) {
+        pred.probabilities.forEach(p => {
+          const row = document.createElement('div');
+          row.className = 'prob-bar-row';
+          row.innerHTML = `
+            <span class="prob-bar-label">${p.name}</span>
+            <div class="prob-bar-track">
+              <div class="prob-bar-fill" style="width: ${p.percentage}%; background: ${p.color};"></div>
+            </div>
+            <span class="prob-bar-val" style="color: ${p.percentage > 10 ? p.color : 'var(--text-muted)'};">
+              ${p.percentage}%
+            </span>
+          `;
+          probContainer.appendChild(row);
+        });
+      }
+
+      // Incident notice
+      const incidentNotice = document.getElementById('simIncidentNotice');
+      if (pred.incident_created) {
+        incidentNotice.style.display = 'flex';
+        document.getElementById('simIncidentId').textContent = pred.incident_created.incident_id;
+      } else {
+        incidentNotice.style.display = 'none';
+      }
+    }
+
+    // Render Donut Chart using pure SVG
+    function renderDonutChart(dist, total) {
+      const svg = document.getElementById('donutSvg');
+      const legend = document.getElementById('donutLegend');
+      document.getElementById('donutCenterCount').textContent = total || 0;
+
+      svg.innerHTML = '';
+      legend.innerHTML = '';
+
+      if (!dist || Object.keys(dist).length === 0) {
+        svg.innerHTML = '<circle cx="100" cy="100" r="70" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="26" />';
+        legend.innerHTML = '<div style="color: var(--text-muted);">No incident records logged</div>';
+        return;
+      }
+
+      const colors = ['#f97316', '#ef4444', '#10b981', '#eab308', '#ec4899', '#a855f7', '#dc2626', '#f43f5e', '#8b5cf6'];
+      const radius = 70;
+      const circumference = 2 * Math.PI * radius;
+      let accumOffset = 0;
+      let idx = 0;
+
+      Object.keys(dist).forEach(key => {
+        const count = dist[key];
+        const fraction = count / total;
+        const dashArray = fraction * circumference;
+        const color = colors[idx % colors.length];
+
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', '100');
+        circle.setAttribute('cy', '100');
+        circle.setAttribute('r', radius);
+        circle.setAttribute('fill', 'none');
+        circle.setAttribute('stroke', color);
+        circle.setAttribute('stroke-width', '24');
+        circle.setAttribute('stroke-dasharray', `${dashArray} ${circumference}`);
+        circle.setAttribute('stroke-dashoffset', -accumOffset);
+        circle.style.transition = 'stroke-width 0.2s';
+        circle.onmouseenter = () => circle.setAttribute('stroke-width', '28');
+        circle.onmouseleave = () => circle.setAttribute('stroke-width', '24');
+
+        svg.appendChild(circle);
+        accumOffset += dashArray;
+
+        // Legend entry
+        const item = document.createElement('div');
+        item.style.display = 'flex';
+        item.style.alignItems = 'center';
+        item.style.gap = '8px';
+        item.innerHTML = `
+          <span style="width: 10px; height: 10px; border-radius: 50%; background: ${color};"></span>
+          <span style="color: var(--text-dim);">${key}:</span>
+          <strong style="color: #fff;">${count}</strong>
+        `;
+        legend.appendChild(item);
+        idx++;
+      });
+    }
+
+    // Load Global Feature Importance
+    async function loadGlobalFeatureImportance() {
+      try {
+        const res = await fetch('/api/explain/global');
+        const data = await res.json();
+        const container = document.getElementById('globalFeatureList');
+        container.innerHTML = '';
+
+        data.forEach(item => {
+          const row = document.createElement('div');
+          row.style.background = 'rgba(255, 255, 255, 0.02)';
+          row.style.padding = '10px 14px';
+          row.style.borderRadius = '8px';
+          row.style.border = '1px solid rgba(255, 255, 255, 0.04)';
+          row.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <div>
+                <strong style="font-family: var(--font-mono); font-size: 0.85rem; color: #fff;">${item.feature}</strong>
+                <span style="font-size: 0.72rem; color: var(--text-dim); margin-left: 8px;">${item.role}</span>
+              </div>
+              <span style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--neon-cyan); font-weight: 700;">
+                ${item.percentage}%
+              </span>
+            </div>
+            <div style="height: 6px; background: rgba(255, 255, 255, 0.05); border-radius: 9999px; overflow: hidden;">
+              <div style="height: 100%; width: ${item.percentage * 4}%; background: linear-gradient(90deg, #3b82f6, #06b6d4); border-radius: 9999px;"></div>
+            </div>
+          `;
+          container.appendChild(row);
+        });
+      } catch (e) {
+        console.error('Error loading global feature importance:', e);
+      }
+    }
+
+    // Render Local SHAP Explanation
+    function renderLocalShap(exp) {
+      document.getElementById('shapEngineBadge').textContent = exp.engine || 'TreeSHAP';
+      document.getElementById('xaiNarrativeBox').textContent = exp.narrative || 'Explanation ready.';
+
+      const list = document.getElementById('localShapList');
+      list.innerHTML = '';
+
+      if (exp.top_contributors) {
+        exp.top_contributors.forEach(item => {
+          const row = document.createElement('div');
+          row.className = 'shap-item';
+
+          const isPos = item.impact === 'positive';
+          const maxMag = 0.5; // normalization reference
+          const barWidth = Math.min((item.magnitude / maxMag) * 100, 100);
+
+          row.innerHTML = `
+            <div style="display: flex; flex-direction: column;">
+              <span class="shap-feature-name">${item.feature}</span>
+              <span class="shap-feature-val">val: ${item.value.toLocaleString()}</span>
+            </div>
+            <div class="shap-bar-container">
+              <div class="${isPos ? 'shap-bar-pos' : 'shap-bar-neg'}" style="width: ${barWidth}%;"></div>
+            </div>
+            <div class="shap-score" style="color: ${isPos ? '#f87171' : '#34d399'};">
+              ${isPos ? '+' : ''}${item.shap_value.toFixed(4)}
+            </div>
+          `;
+          list.appendChild(row);
+        });
+      }
+    }
+
+    // Load Incidents List
+    async function loadIncidents() {
+      try {
+        const filter = document.getElementById('incidentStatusFilter')?.value || '';
+        const url = filter ? `/api/incidents?status=${filter}` : '/api/incidents';
+        const res = await fetch(url);
+        const data = await res.json();
+        AppState.incidents = data;
+
+        const tableBody = document.getElementById('incidentsTableBody');
+        const recentBody = document.getElementById('recentIncidentsTable');
+        tableBody.innerHTML = '';
+        recentBody.innerHTML = '';
+
+        if (data.length === 0) {
+          const emptyHtml = `<tr><td colspan="9" style="text-align: center; color: var(--text-muted); padding: 24px;">No incidents matching current criteria.</td></tr>`;
+          tableBody.innerHTML = emptyHtml;
+          recentBody.innerHTML = emptyHtml;
+          return;
+        }
+
+        data.forEach((inc, idx) => {
+          const rowHtml = `
+            <td><code style="color: var(--neon-cyan); font-weight: 600;">${inc.incident_id}</code></td>
+            <td style="font-size: 0.78rem; color: var(--text-dim);">${inc.timestamp}</td>
+            <td><strong>${inc.attack_type}</strong></td>
+            <td><span class="soc-badge soc-badge-${inc.severity.toLowerCase()}">${inc.severity}</span></td>
+            <td><code style="color: #cbd5e1;">${inc.source_ip}</code></td>
+            <td>${inc.target_asset}</td>
+            <td style="font-family: var(--font-mono);">${inc.confidence}%</td>
+            <td><span class="soc-badge soc-badge-status-${inc.status.toLowerCase()}">${inc.status}</span></td>
+            <td>
+              <div style="display: flex; gap: 6px;">
+                ${inc.status === 'OPEN' ? `
+                  <button class="soc-btn soc-btn-danger soc-btn-sm" onclick="openMitigationModal('${inc.incident_id}', 'BLOCK_IP', '${inc.source_ip}')">Block IP</button>
+                  <button class="soc-btn soc-btn-secondary soc-btn-sm" onclick="openMitigationModal('${inc.incident_id}', 'RATE_LIMIT', '${inc.source_ip}')">Rate Limit</button>
+                  <button class="soc-btn soc-btn-secondary soc-btn-sm" onclick="openMitigationModal('${inc.incident_id}', 'ISOLATE_DEVICE', '${inc.target_asset}')">Isolate</button>
+                ` : `
+                  <button class="soc-btn soc-btn-secondary soc-btn-sm" onclick="openMitigationModal('${inc.incident_id}', 'RESOLVE', '${inc.source_ip}')">Restore</button>
+                `}
+              </div>
+            </td>
+          `;
+
+          const tr = document.createElement('tr');
+          tr.innerHTML = rowHtml;
+          tableBody.appendChild(tr);
+
+          // Top 5 in recent dashboard
+          if (idx < 5) {
+            const trRecent = document.createElement('tr');
+            trRecent.innerHTML = rowHtml;
+            recentBody.appendChild(trRecent);
+          }
+        });
+      } catch (e) {
+        console.error('Error loading incidents:', e);
+      }
+    }
+
+    // Open Mitigation Action Modal
+    function openMitigationModal(incidentId, actionType, target) {
+      AppState.pendingAction = { incidentId, actionType, target };
+      const modal = document.getElementById('mitigationModal');
+      modal.classList.add('open');
+
+      const actionTitles = {
+        BLOCK_IP: 'Simulated OpenFlow Drop Enforcement',
+        RATE_LIMIT: 'Simulated OpenFlow QoS Metering',
+        ISOLATE_DEVICE: 'Simulated VLAN Quarantine Containment',
+        RESOLVE: 'Restore Baseline OpenFlow Rules'
+      };
+
+      const actionRules = {
+        BLOCK_IP: `OFPFC_ADD priority=65535, match=(eth_type=0x0800, ipv4_src=${target}), actions=DROP`,
+        RATE_LIMIT: `OFPFC_ADD priority=60000, match=(eth_type=0x0800, ipv4_src=${target}), actions=METER:1001(drop_rate=100kbps)`,
+        ISOLATE_DEVICE: `OFPFC_MODIFY match=(in_port=switch_port), actions=SET_FIELD(vlan_vid=999_QUARANTINE)`,
+        RESOLVE: `OFPFC_DELETE match=(eth_type=0x0800, ipv4_src=${target})`
+      };
+
+      document.getElementById('modalActionTitle').textContent = actionTitles[actionType] || 'Enforce Mitigation';
+      document.getElementById('modalRuleCode').textContent = actionRules[actionType] || 'OFPFC_ADD ...';
+    }
+
+    function closeMitigationModal() {
+      document.getElementById('mitigationModal').classList.remove('open');
+      AppState.pendingAction = null;
+    }
+
+    // Confirm & Push Mitigation
+    async function confirmMitigationAction() {
+      if (!AppState.pendingAction) return;
+      const { incidentId, actionType } = AppState.pendingAction;
+      const btn = document.getElementById('btnConfirmMitigation');
+      btn.disabled = true;
+      btn.textContent = 'Pushing to SDN Controller...';
+
+      try {
+        const res = await fetch(`/api/incidents/${incidentId}/action`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: actionType, operator: 'SOC_Analyst' })
+        });
+        const data = await res.json();
+        closeMitigationModal();
+
+        // Refresh lists
+        loadIncidents();
+        loadAuditLogs();
+        loadStats();
+      } catch (e) {
+        alert('Mitigation error: ' + e.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Confirm & Push Rule';
+      }
+    }
+
+    // Load Audit Log
+    async function loadAuditLogs() {
+      try {
+        const res = await fetch('/api/audit-log');
+        const data = await res.json();
+        AppState.auditLogs = data;
+
+        const body = document.getElementById('auditLogTableBody');
+        body.innerHTML = '';
+
+        data.forEach(log => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td style="font-size: 0.78rem; color: var(--text-dim);">${log.timestamp}</td>
+            <td><code style="color: #93c5fd;">${log.operator}</code></td>
+            <td><strong style="color: var(--neon-cyan);">${log.action}</strong></td>
+            <td><code style="color: var(--text-dim);">${log.incident_id}</code></td>
+            <td style="font-size: 0.8rem;">${log.target}</td>
+            <td><code style="font-size: 0.72rem; color: #a7f3d0;">${log.openflow_rule}</code></td>
+            <td><span class="soc-badge soc-badge-safe">${log.result.split('(')[0]}</span></td>
+          `;
+          body.appendChild(tr);
+        });
+      } catch (e) {
+        console.error('Error loading audit log:', e);
+      }
+    }
+
+    // Load Topology
+    async function loadTopology() {
+      try {
+        const res = await fetch('/api/topology');
+        const data = await res.json();
+        AppState.topology = data;
+
+        // Render device status table in dashboard
+        const devTable = document.getElementById('deviceStatusTable');
+        devTable.innerHTML = '';
+
+        data.nodes.filter(n => n.type === 'device' || n.type === 'server' || n.type === 'workstation').forEach(n => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><strong>${n.name}</strong></td>
+            <td style="color: var(--text-dim); font-size: 0.78rem;">${n.department}</td>
+            <td><code style="color: var(--neon-cyan);">${n.ip}</code></td>
+            <td style="font-size: 0.76rem; color: var(--text-muted);">${n.protocol}</td>
+            <td><span class="soc-badge soc-badge-safe" id="statusPill-${n.id}">HEALTHY</span></td>
+          `;
+          devTable.appendChild(tr);
+        });
+
+        renderTopology();
+      } catch (e) {
+        console.error('Error loading topology:', e);
+      }
+    }
+
+    // Render SVG Interactive Topology
+    function renderTopology() {
+      if (!AppState.topology) return;
+      const svg = document.getElementById('topologySvg');
+      svg.innerHTML = '';
+
+      const nodes = AppState.topology.nodes;
+      const links = AppState.topology.links;
+
+      // Layout coordinates (Spine-and-leaf style)
+      const positions = {
+        'firewall': { x: 120, y: 300, icon: '🔥' },
+        'sdn-controller': { x: 500, y: 100, icon: '🧠' },
+        'sdn-switch': { x: 500, y: 300, icon: '🔀' },
+        'icu-monitor': { x: 260, y: 490, icon: '📟' },
+        'infusion-pump': { x: 380, y: 510, icon: '💉' },
+        'ehr-server': { x: 860, y: 220, icon: '🗄️' },
+        'pacs-server': { x: 860, y: 360, icon: '🩻' },
+        'pharmacy-dispenser': { x: 640, y: 510, icon: '💊' },
+        'pathology-analyzer': { x: 760, y: 490, icon: '🔬' },
+        'nurse-workstation': { x: 300, y: 180, icon: '💻' },
+        'telehealth-gw': { x: 700, y: 180, icon: '🤖' },
+        'surgical-terminal': { x: 860, y: 100, icon: '🖥️' }
+      };
+
+      // Draw links
+      links.forEach(l => {
+        const s = positions[l.source];
+        const t = positions[l.target];
+        if (!s || !t) return;
+
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', s.x);
+        line.setAttribute('y1', s.y);
+        line.setAttribute('x2', t.x);
+        line.setAttribute('y2', t.y);
+        line.setAttribute('stroke', 'rgba(59, 130, 246, 0.35)');
+        line.setAttribute('stroke-width', '2');
+        line.setAttribute('id', `link-${l.source}-${l.target}`);
+        svg.appendChild(line);
+      });
+
+      // Draw nodes
+      nodes.forEach(n => {
+        const pos = positions[n.id] || { x: 500, y: 300, icon: '📦' };
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.setAttribute('class', 'topo-node');
+        g.setAttribute('id', `topoNode-${n.id}`);
+        g.onclick = () => openInspector(n);
+
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', pos.x);
+        circle.setAttribute('cy', pos.y);
+        circle.setAttribute('r', n.type === 'switch' ? '28' : '22');
+        circle.setAttribute('fill', n.type === 'switch' ? '#1d4ed8' : '#0f172a');
+        circle.setAttribute('stroke', '#3b82f6');
+        circle.setAttribute('stroke-width', '2');
+
+        const textIcon = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        textIcon.setAttribute('x', pos.x);
+        textIcon.setAttribute('y', pos.y + 6);
+        textIcon.setAttribute('text-anchor', 'middle');
+        textIcon.setAttribute('font-size', '16');
+        textIcon.textContent = pos.icon;
+
+        const textLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        textLabel.setAttribute('x', pos.x);
+        textLabel.setAttribute('y', pos.y + 36);
+        textLabel.setAttribute('text-anchor', 'middle');
+        textLabel.setAttribute('fill', '#cbd5e1');
+        textLabel.setAttribute('font-size', '11');
+        textLabel.setAttribute('font-family', 'Outfit, sans-serif');
+        textLabel.setAttribute('font-weight', '600');
+        textLabel.textContent = n.name.split(' ')[0] + ' ' + (n.name.split(' ')[1] || '');
+
+        g.appendChild(circle);
+        g.appendChild(textIcon);
+        g.appendChild(textLabel);
+        svg.appendChild(g);
+      });
+    }
+
+    function openInspector(node) {
+      AppState.selectedTopoNode = node;
+      const insp = document.getElementById('topoInspector');
+      insp.classList.add('open');
+
+      document.getElementById('inspNodeName').textContent = node.name;
+      document.getElementById('inspNodeRole').textContent = node.role;
+      document.getElementById('inspNodeDept').textContent = node.department;
+      document.getElementById('inspNodeIp').textContent = node.ip;
+      document.getElementById('inspNodeMac').textContent = node.mac;
+      document.getElementById('inspNodeProto').textContent = node.protocol;
+      document.getElementById('inspNodeDesc').textContent = node.description;
+
+      const st = document.getElementById('inspNodeStatus');
+      st.textContent = node.status;
+      st.className = `soc-badge ${node.status === 'HEALTHY' ? 'soc-badge-safe' : 'soc-badge-critical'}`;
+    }
+
+    function closeInspector() {
+      document.getElementById('topoInspector').classList.remove('open');
+      AppState.selectedTopoNode = null;
+    }
+
+    function simulateAttackOnSelectedNode() {
+      if (!AppState.selectedTopoNode) return;
+      const n = AppState.selectedTopoNode;
+      switchModule('simulation');
+
+      // Find matching scenario
+      const match = Object.keys(AppState.scenarios).find(k => {
+        return AppState.scenarios[k].target_node_id === n.id;
+      });
+      if (match) {
+        selectScenario(match);
+      }
+    }
+
+    function highlightTopologyAttack(nodeId) {
+      document.querySelectorAll('.topo-node').forEach(el => el.classList.remove('attacked'));
+      const target = document.getElementById(`topoNode-${nodeId}`);
+      if (target) {
+        target.classList.add('attacked');
+      }
+      const pill = document.getElementById(`statusPill-${nodeId}`);
+      if (pill) {
+        pill.textContent = 'UNDER ATTACK';
+        pill.className = 'soc-badge soc-badge-critical';
+      }
+    }
+
+    // Load Evaluation Data & Matrix
+    async function loadEvaluation() {
+      try {
+        const res = await fetch('/api/evaluation');
+        const data = await res.json();
+        AppState.evaluation = data;
+
+        // Render Confusion Matrix
+        const mat = data.confusion_matrix;
+        const matTable = document.getElementById('confusionMatrixTable');
+        matTable.innerHTML = '';
+
+        // Header Row
+        let headerHtml = '<tr><th>Actual \\ Pred</th>';
+        for (let i = 0; i < 9; i++) {
+          headerHtml += `<th>C${i}</th>`;
+        }
+        headerHtml += '</tr>';
+        matTable.innerHTML = headerHtml;
+
+        // Rows
+        for (let r = 0; r < 9; r++) {
+          let rowHtml = `<tr><th>C${r}</th>`;
+          for (let c = 0; c < 9; c++) {
+            const count = mat[r][c];
+            const isDiag = r === c;
+            const cls = isDiag && count > 0 ? 'matrix-cell-hit' : 'matrix-cell-zero';
+            rowHtml += `<td class="${cls}" title="Actual Class ${r} -> Predicted Class ${c}: ${count.toLocaleString()}">${count > 0 ? count.toLocaleString() : '0'}</td>`;
+          }
+          rowHtml += '</tr>';
+          matTable.innerHTML += rowHtml;
+        }
+
+        // Per-class Breakdown Table
+        const perClassBody = document.getElementById('perClassTableBody');
+        perClassBody.innerHTML = '';
+        data.per_class.forEach(c => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><code>${c.class_id}</code></td>
+            <td><strong>${c.name}</strong></td>
+            <td style="color: #34d399; font-family: var(--font-mono);">${(c.precision * 100).toFixed(1)}%</td>
+            <td style="color: #34d399; font-family: var(--font-mono);">${(c.recall * 100).toFixed(1)}%</td>
+            <td style="color: #34d399; font-family: var(--font-mono);">${(c.f1 * 100).toFixed(1)}%</td>
+            <td style="font-family: var(--font-mono);">${c.support.toLocaleString()}</td>
+          `;
+          perClassBody.appendChild(tr);
+        });
+
+        // Benchmark Algorithms Table
+        const benchBody = document.getElementById('benchmarkTableBody');
+        benchBody.innerHTML = '';
+        data.benchmark_comparison.forEach(m => {
+          const tr = document.createElement('tr');
+          if (m.selected) tr.style.background = 'rgba(59, 130, 246, 0.12)';
+          tr.innerHTML = `
+            <td>
+              <strong>${m.model}</strong>
+              ${m.selected ? '<span class="soc-badge soc-badge-safe" style="margin-left: 8px;">Active in Production</span>' : ''}
+            </td>
+            <td style="font-family: var(--font-mono);">${(m.accuracy * 100).toFixed(1)}%</td>
+            <td style="font-family: var(--font-mono);">${(m.f1 * 100).toFixed(1)}%</td>
+            <td style="font-family: var(--font-mono);">${(m.recall * 100).toFixed(1)}%</td>
+            <td style="font-family: var(--font-mono);">${(m.precision * 100).toFixed(1)}%</td>
+            <td>${m.selected ? '<span style="color: #34d399; font-weight: 600;">Deployed Engine</span>' : '<span style="color: var(--text-muted);">Benchmark Baseline</span>'}</td>
+          `;
+          benchBody.appendChild(tr);
+        });
+      } catch (e) {
+        console.error('Error loading evaluation:', e);
+      }
+    }
+
+    // Reset Demo Baseline
+    async function resetDemoData() {
+      if (!confirm('Reset all demonstration incidents and audit logs to the clean baseline?')) return;
+      try {
+        const res = await fetch('/api/reset_demo', { method: 'POST' });
+        const data = await res.json();
+        alert(data.message || 'Demo data restored.');
+        loadStats();
+        loadIncidents();
+        loadAuditLogs();
+        loadTopology();
+      } catch (e) {
+        alert('Reset error: ' + e.message);
+      }
+    }
+  </script>
+</body>
+</html>

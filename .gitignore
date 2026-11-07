@@ -48,3 +48,8 @@ model.zip
 
 # Logs
 *.log
+
+# Presentations
+*.pptx
+*.ppt
+

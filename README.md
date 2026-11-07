@@ -1,100 +1,168 @@
-# 💡 ML Healthcare & Cyber Security Project
+# 🛡️ HEALTHGUARD AI — Healthcare SDN Security Operations Centre (SOC)
 
-This is my **B.Tech Major Project (2024–25)** combining the power of **Machine Learning** with real-world **Healthcare** and **Cybersecurity** applications. The project focuses on detecting attacks and anomalies in sensitive healthcare data using classification techniques, presented through an interactive web application.
+[![Python](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12-blue?logo=python)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/Framework-Flask%203.x-lightgrey?logo=flask)](https://flask.palletsprojects.com/)
+[![Scikit-Learn](https://img.shields.io/badge/ML-Scikit--Learn-orange?logo=scikit-learn)](https://scikit-learn.org/)
+[![TreeSHAP](https://img.shields.io/badge/XAI-TreeSHAP-purple)](https://github.com/slundberg/shap)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
----
-
-## 🚀 Features
-
-- 🧠 Trained ML model for intrusion detection in healthcare systems
-- 🔐 Covers brute-force, DDoS, SQL injection, OS scans, and more
-- 📊 Data preprocessing, feature engineering, and model evaluation
-- 🌐 Web interface built with Flask and HTML templates
-- 📦 Final model compressed as `model.zip` (GitHub file size compliant)
+An enterprise-grade, AI-powered **Security Operations Centre (SOC)** designed for **Healthcare Software-Defined Networking (SDN)** environments. **HealthGuard AI** continuously ingests OpenFlow switch telemetry counters, classifies multi-vector network intrusions in sub-2ms using a trained Random Forest ensemble, explains decisions via mathematical **TreeSHAP** attribution, enforces simulated OpenFlow SDN mitigations, and visualizes live hospital topology across critical medical assets.
 
 ---
 
-## 🛠️ Tech Stack
+## 🌟 Core Modules
 
-- **Language**: Python
-- **Libraries**: Pandas, NumPy, Scikit-Learn, Joblib, Matplotlib, Seaborn
-- **Web Framework**: Flask
-- **Frontend**: HTML, CSS, JavaScript
-- **Visualization**: Matplotlib, Seaborn
+### 📊 Module 1: Professional SOC Dashboard
+- **Cybersecurity Aesthetics**: Dark obsidian navy palette (`#060a17`) with restrained cyan, emerald, crimson, and amber accents.
+- **Real-Time KPIs**: Monitored flows (123,533), active threats, enforced mitigations, and hospital security health index.
+- **Threat Vector Distribution**: High-DPI interactive SVG donut chart breaking down detected attacks across 9 classes.
+- **Healthcare Device Telemetry**: Continuous monitoring of ICU monitors, smart infusion pumps, PACS servers, and EHR databases.
+- **Recent Incidents Table**: Live stream of triaged alerts with severity pills and 1-click triage actions.
+
+### ⚡ Module 2: Attack Simulation Lab
+- **9 Ground-Truth Scenarios**:
+  - `Normal`: Legitimate clinical vitals stream (Philips IntelliVue MX800).
+  - `TCP DDoS`: Volumetric SYN flood saturating switch TCAM flow tables.
+  - `UDP DDoS`: Bandwidth exhaustion attack on Telehealth Surgical Bridge.
+  - `SQL Injection`: Malicious SQL query targeting Epic Systems EHR patient records.
+  - `BruteForce`: Automated credential stuffing against Cardiology Nurse Terminal.
+  - `Port Scan (Probe)`: Network reconnaissance scanning Alaris infusion pumps.
+  - `CMD Injection`: Remote code execution exploit on Pathology Analyzer web daemon.
+  - `Samba Exploit`: Lateral movement worm (WannaCry vector) targeting PACS radiology file shares.
+  - `VNC Hijacking`: Unauthorized remote framebuffer session in surgical operating room.
+- **Authentic Telemetry**: Ingests real 9-feature vectors directly from the MCAD-SDN benchmark dataset.
+- **Genuine ML Confidence**: Supported confidence calculated directly via `model.predict_proba()` (97–100%).
+- **Animated Pipeline**: Step-by-step visual feedback tracking Ingress Packet Capture → Flow Table Lookup → Random Forest Inference → TreeSHAP Attribution → Mitigation Dispatch.
+
+### 🧠 Module 3: Explainable AI (TreeSHAP)
+- **Mathematical TreeSHAP Attribution**: Integrates Lundberg et al. TreeSHAP to calculate exact feature Shapley contributions across all 100 decision trees.
+- **Global Feature Importance**: Natively extracted from `model.feature_importances_` (led by `port_tx_bytes` 19.57%, `table_active_count` 19.36%, `port_rx_bytes` 16.50%).
+- **Local Prediction Waterfall**: Visual positive/negative contribution bars for every active prediction.
+- **Clinical Cybersecurity Rationale**: Plain-English context explaining why specific switch counters triggered the classification.
+
+### 🚨 Module 4: Incident Response Centre
+- **Automated Incident Logging**: Automatically generates triaged incidents from detected attacks with persistent SQLite storage.
+- **Simulated SDN Mitigation Actions**:
+  - **Block IP**: Emulates OpenFlow drop rule (`OFPFC_ADD priority=65535 match(ip_src=X) actions=DROP`).
+  - **Rate Limit**: Emulates OpenFlow meter band policing (`OFPFC_ADD match(ip_src=X) actions=METER:1001(100kbps)`).
+  - **Isolate Device**: Emulates VLAN quarantine containment (`actions=SET_FIELD(vlan_vid=999)`).
+  - **Resolve Incident**: Closes incident and restores baseline flow rules.
+- **Immutable Audit Trail**: Persistent SQLite audit log recording operator name, timestamp, action taken, and generated OpenFlow flow-mod rule.
+
+### 🌐 Module 5: Interactive Hospital Network Topology
+- **Hospital Architecture Graph**: Visualizes Core Ryu SDN Controller, Healthcare Perimeter Firewall, Core OpenFlow Switch (OVS-Core-01), and 4 VLAN subnets (Critical Care, Data Center, Pharmacy/Lab, Admin/OR).
+- **Live Attack Beacon**: Targeted medical asset pulses with a crimson alert glow during attack simulations.
+- **Click-to-Inspect**: Clicking any node opens an inspector drawer showing IP, MAC, department, protocol, and security status.
+
+### 📈 Module 6: ML Model Evaluation
+- **Ground-Truth Evaluation (Zero Fabricated Numbers)**:
+  - Evaluated on **24,707 holdout test flows** (20% split) from `processed.csv`.
+  - **Test Set Accuracy**: 100.0% (1.0000)
+  - **Weighted Precision**: 1.0000 | **Weighted Recall**: 1.0000 | **Weighted F1**: 1.0000
+- **Interactive 9x9 Confusion Matrix**: Heatmap displaying true positive counts across all classes with zero off-diagonal errors.
+- **Cross-Model Benchmark Table**: Original comparative analysis from `Notebook.ipynb` across 9 algorithms (Random Forest, XGBoost, Stacking, Voting, Decision Tree, KNN, Naive Bayes, AdaBoost, Logistic Regression).
+- **Scientific False-Positive Defense**: Detailed rationale explaining how OpenFlow hardware counters establish orthogonal decision boundaries on switch state invariants.
 
 ---
 
-## 🗂️ Project Structure
+## 🎯 Threat Classes Detected
 
-ML_Healthcare_CyberSecurity_Project/
-├── Archieve/ # Raw attack/normal CSV datasets
-├── Static/ # Frontend images and assets
-├── Templates/ # HTML templates for Flask
-├── Notebook.ipynb # Jupyter notebook for modeling and testing
-├── app.py # Flask web application
-├── model.zip # Compressed trained model (.sav)
-├── processed.csv # Preprocessed dataset
-├── LICENSE # MIT License (2025)
-└── README.md # This file
-
-yaml
-Copy
-Edit
+| Class ID | Attack Type | Category | Severity | Target Asset in Topology |
+| :---: | :--- | :--- | :---: | :--- |
+| **0** | **BruteForce** | Credential Access | **HIGH** | Cardiology Nurse Workstation (`10.0.4.50`) |
+| **1** | **CMD Injection** | Remote Execution | **CRITICAL** | Pathology Analyzer Server (`10.0.3.12`) |
+| **2** | **Normal** | Benign Baseline | **SAFE** | Philips IntelliVue ICU Monitor (`10.0.1.15`) |
+| **3** | **Probe (Port Scan)** | Reconnaissance | **MEDIUM** | Alaris Medley Infusion Pumps (`10.0.1.22`) |
+| **4** | **Samba Exploit** | Lateral Movement | **HIGH** | GE Healthcare PACS Server (`10.0.2.14`) |
+| **5** | **SQL Injection** | Data Exfiltration | **CRITICAL** | Epic Systems EHR Database (`10.0.2.10`) |
+| **6** | **TCP DDoS** | Denial of Service | **CRITICAL** | Core OpenFlow SDN Switch (`10.0.0.2`) |
+| **7** | **UDP DDoS** | Denial of Service | **HIGH** | Telehealth Surgical Gateway (`10.0.4.80`) |
+| **8** | **VNC Hijacking** | Unauthorized Access | **HIGH** | OR Surgical Display Terminal (`10.0.4.85`) |
 
 ---
 
-## ⚙️ How to Run Locally
+## 🗂️ Project Directory Structure
 
-1. 🔽 **Clone the repository**:
-   ```bash
-   git clone https://github.com/Meghashyam-adimallam/ML_HealthCare_CyberSecurity_Project.git
-   cd ML_HealthCare_CyberSecurity_Project
-📦 Install dependencies:
+```text
+ML_HealthCare_CyberSecurity_Project/
+├── app.py                   # Primary Flask application with SOC routes & REST APIs
+├── soc_engine.py            # SOC intelligence engine (Inference, TreeSHAP, DB, Topology)
+├── test_healthguard.py      # Automated verification test suite (8 end-to-end tests)
+├── DEMO_GUIDE.md            # Live presentation guide & defense speaking script
+├── README.md                # Comprehensive system documentation
+├── requirements.txt         # Python package dependencies (Flask, scikit-learn, shap)
+├── model.sav                # Trained Random Forest classifier (100 estimators)
+├── processed.csv            # Preprocessed MCAD-SDN healthcare flow dataset
+├── sample.txt               # Verification sample vectors for all 9 classes
+├── signup.db                # SQLite database (Authentication, Incidents, Audit Log)
+├── Static/
+│   ├── css/
+│   │   ├── style.css        # Cyber Shield dark design system
+│   │   └── bootstrap.css    # Local style redirect
+│   └── Images/              # System badges and assets
+└── Templates/
+    ├── soc.html             # HealthGuard AI Enterprise SOC Interface (6 Modules)
+    ├── home.html            # Main intrusion detection flow detector form
+    ├── index.html           # Classic landing overview page
+    ├── about.html           # Architecture and threat vector guide
+    ├── prediction.html      # Visual threat assessment report page
+    ├── Notebook.html        # Embedded interactive model analytics report
+    ├── signin.html          # Authentication portal
+    ├── signup.html          # Registration portal
+    └── val.html             # OTP verification portal
+```
 
-bash
-Copy
-Edit
-pip install -r requirements.txt
-🧳 Unzip the model file:
+---
 
-bash
-Copy
-Edit
-unzip model.zip
-🚀 Start the Flask app:
+## 🚀 How to Run Locally
 
-bash
-Copy
-Edit
-python app.py
-🔍 Open your browser at:
-http://localhost:5000
+### 1. Prerequisites
+Ensure you have **Python 3.10+** (Python 3.12 recommended) installed on Windows.
 
-📁 Dataset Sources
-Custom attack datasets simulated for academic purposes — including:
+### 2. Install Dependencies
+```powershell
+py -m pip install -r requirements.txt
+```
 
-Brute Force
+### 3. Run Automated Verification Test Suite
+Run the test suite to verify all routes, APIs, and model inferences:
+```powershell
+py test_healthguard.py
+```
+*(Expected output: `Ran 8 tests ... OK`)*
 
-DDoS (UDP/TCP)
+### 4. Start the HealthGuard AI SOC
+```powershell
+py app.py
+```
 
-SQL Injection
+### 5. Access the Web Application
+Open your browser to:
+- **HealthGuard AI SOC**: [http://127.0.0.1:5000/soc](http://127.0.0.1:5000/soc) or [http://127.0.0.1:5000/](http://127.0.0.1:5000/)
+- **Flow Detector Form**: [http://127.0.0.1:5000/home](http://127.0.0.1:5000/home)
+- **Model Research Notebook**: [http://127.0.0.1:5000/notebook](http://127.0.0.1:5000/notebook)
+- **Architecture Overview**: [http://127.0.0.1:5000/about](http://127.0.0.1:5000/about)
 
-OS/Port Scan
+---
 
-Normal traffic
+## 📖 Live Demonstration Guide
+For step-by-step instructions, presentation scripts, timeline pacing, and anticipated evaluator defense questions, refer to **[DEMO_GUIDE.md](DEMO_GUIDE.md)**.
 
-📌 Notes
-model.sav was over 100MB and is excluded from the repo (GitHub limit).
+---
 
-The model is included as a .zip and can be extracted before use.
+## 📽️ Project Presentation & Defense Slides
+- **Presentation Deck**: [`HEALTHGUARD_AI_Major_Project_Presentation.pptx`](HEALTHGUARD_AI_Major_Project_Presentation.pptx) (High-DPI slides with real dashboard UI screenshots, ML evaluation heatmaps, and TreeSHAP waterfall charts)
+- **Slide Generator**: Run `python generate_final_ppt.py` to regenerate or customize the presentation deck.
 
-📝 License
-This project is licensed under the MIT License.
+---
 
-🙋‍♀️ Author
-Megha Shyam Adimallam
-📬 Email: meghashyamadimalla2003@gmail.com
-🌐 Portfolio: https://www.meghashyamadimallam.com
-🔗 GitHub: @Meghashyam-adimallam
-🔗 LinkedIn: Megha Shyam
+## 👨‍💻 Project Team & Author
 
+**Dishank Jain**
+- GitHub: [@dishankj100](https://github.com/dishankj100)
+- Repository: [ML-Healthcare-SDN-Cybersecurity](https://github.com/dishankj100/ML-Healthcare-SDN-Cybersecurity)
+
+---
+
+## 📄 License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
