@@ -224,3 +224,155 @@ same comparison, and they do not agree with each other.
 - **Live Mininet traffic.** Generate traffic in a live topology and classify it with the
   trained models, to see whether offline accuracy survives contact with traffic the models
   were not built from.
+
+---
+
+## 7. Rate features and confound checks
+
+Two new feature sets were built and evaluated on the same temporal split (first 70%, 200-row
+gap, last 30%, no shuffling), with the same eight models and the same train-only tuning.
+
+**R1** uses only single-row features, no history and no `ip_duration`:
+`ip_bytes`, `ip_packet`, `ip_bytes/ip_packet`, `port_rx_bytes/port_duration_sec`,
+`port_tx_bytes/port_duration_sec`, `port_rx_packets/port_duration_sec`,
+`port_rx_bytes/port_rx_packets`, `port_flow_count`, `table_active_count`.
+
+**R2** uses backward-looking per-flow deltas keyed on `(src, dst, in_port)`, divided by the
+change in `port_duration_sec` between consecutive observations of that key. `src` and `dst`
+are used for keying only and are never model features. Deltas were computed on each whole
+file in original row order and then split, so gap rows serve as history but belong to neither
+set. Rows with zero time change or a negative delta were dropped; retention stayed between
+97.82% (UDPDDOS) and 100.00% (VNC), so no class came near the 30% loss threshold.
+
+**A note on what the R1 rates mean.** `port_duration_sec` is switch uptime, not a per-row
+interval. So `port_rx_bytes / port_duration_sec` is a **lifetime average since the switch came
+up**, not an instantaneous rate. It still grows slowly with time, just far less than the raw
+counter. Only R2's deltas are true interval rates.
+
+### Did the tree models recover?
+
+Yes, and substantially. Test accuracy:
+
+| Model | Original 9 counters | R1 | R2 |
+|---|---|---|---|
+| Decision Tree | 0.4372 | 0.7581 | 0.8101 |
+| Random Forest | 0.3978 | 0.9452 | 0.8285 |
+| XGBoost | 0.5284 | 0.8899 | 0.7753 |
+| LightGBM | 0.5412 | 0.8476 | 0.8430 |
+| AdaBoost | 0.3883 | 0.8241 | 0.4109 |
+
+Random Forest moves from 0.3978 to 0.9452 under R1, a gain of 0.5474. Decision Tree gains
+0.3209 under R1 and 0.3729 under R2. On R1 the trees are no longer the worst family in the
+table.
+
+### Did the Logistic Regression advantage shrink or vanish?
+
+It shrank under R1 and reversed under R2.
+
+| Model | Original 9 counters | R1 | R2 |
+|---|---|---|---|
+| Logistic Regression | 0.9598 | 0.9515 | 0.6912 |
+| KNN | 0.8185 | 0.9576 | 0.7641 |
+
+Under R1, Logistic Regression (0.9515) is no longer best; KNN leads at 0.9576 and Random
+Forest is within 0.0063 of it at 0.9452. Under R2, Logistic Regression falls to 0.6912, well
+below Random Forest (0.8285) and LightGBM (0.8430). The large linear-model advantage seen on
+the cumulative counters does not survive once the growing counters are replaced by rates.
+
+### Is the comparison fair?
+
+Yes, and this needed checking. R2 drops rows, so its test set is smaller and different. To
+separate the feature change from the row change, the original nine cumulative counters were
+re-evaluated on **exactly the R2 retained rows**:
+
+| Model | 9 counters, full test | 9 counters, R2 rows only | R2 features, R2 rows |
+|---|---|---|---|
+| Logistic Regression | 0.9598 | 0.9904 | 0.6912 |
+| Random Forest | 0.3978 | 0.3848 | 0.8285 |
+| KNN | 0.8185 | 0.8176 | 0.7641 |
+| LightGBM | 0.5412 | 0.5943 | 0.8430 |
+
+On identical rows, the cumulative counters score **0.9904** with Logistic Regression against
+**0.6912** for the R2 deltas. So R2's lower accuracy is not an artifact of the smaller test
+set; the deltas genuinely carry less separable signal than the raw counters do. Equally,
+Random Forest's R2 gain (0.3848 to 0.8285) is a real feature effect, not row selection.
+
+### Did the unseen-normal results improve?
+
+Mixed, and mostly not in the way that would matter.
+
+Percent labelled Normal on the internet traces:
+
+| Model | Original (9 counters) | R1 | R2 |
+|---|---|---|---|
+| Random Forest | 93.27 / 97.16 / 93.49 | 100.00 / 100.00 / 100.00 | 75.67 / 75.48 / 75.39 |
+| Logistic Regression | 8.97 / 64.65 / 9.62 | 100.00 / 99.98 / 100.00 | 71.02 / 71.56 / 70.40 |
+
+On `normal_iperf.csv`, the file every model failed before:
+
+| Model | Original | R1 | R2 |
+|---|---|---|---|
+| Random Forest | 0.25 | 0.01 | 48.01 |
+| Logistic Regression | 16.26 | 19.84 | 16.89 |
+| Decision Tree | 0.23 | 0.05 | 40.53 |
+
+R2 improves iperf markedly for the trees (0.25 to 48.01 for Random Forest) but still labels
+about half of it as an attack. R1 makes the internet traces look perfect while leaving iperf
+broken, which is not a coherent improvement.
+
+The scapy DDoS file remains incoherent across models. Under R1, Random Forest, XGBoost and
+LightGBM all assign Probe to 100.00% of rows, while KNN assigns UDPDDOS to 99.56% and Logistic
+Regression splits Normal 49.18% / UDPDDOS 47.30%. Under R2, Random Forest, Logistic
+Regression, XGBoost and LightGBM assign Normal to 100.00%, while KNN assigns SQLInjection to
+98.75%. No measurement here explains the disagreement.
+
+### What the confound baselines imply
+
+Source: `results/rate_features/confound_baselines.csv`.
+
+| Baseline | Test accuracy | Macro F1 |
+|---|---|---|
+| Chance (uniform, 1/9) | 0.1111 | 0.1111 |
+| Majority class (UDPDDOS, 18.03% of test) | 0.1803 | 0.0340 |
+| Logistic Regression on `port_duration_sec` only | 0.1617 | 0.0893 |
+| Random Forest on `port_duration_sec` only | 0.0874 | 0.0414 |
+| Logistic Regression on `table_active_count` only | 0.5947 | 0.4308 |
+| **Random Forest on `table_active_count` only** | **0.6549** | **0.5894** |
+| Random Forest on 9 cumulative counters | 0.3978 | 0.3774 |
+| Logistic Regression on 9 cumulative counters | 0.9598 | 0.9496 |
+
+Three things follow, and they are uncomfortable.
+
+1. **A single gauge feature beats the full nine-feature Random Forest.** `table_active_count`
+   alone scores 0.6549 against 0.3978 for all nine counters. Adding eight more features made
+   Random Forest substantially worse, which is the opposite of what a useful feature set does.
+2. **`port_duration_sec` is nearly worthless on its own.** 0.1617 and 0.0874 are at or below
+   the majority-class baseline of 0.1803. Switch uptime alone does not identify the class.
+3. **The class signal is concentrated in one gauge.** `table_active_count` is the number of
+   active flow entries in the switch table. It is a property of how much traffic the scenario
+   generated, not of what the traffic was doing. A model scoring 0.6549 from that one number
+   is reading traffic volume and session shape, not attack behaviour.
+
+This is consistent with the capture-session confound described in section 5, but it does not
+prove it. Nothing here measures how much of the 0.9598 Logistic Regression accuracy is
+session identity rather than attack behaviour. What the baselines do establish is that a
+large share of the achievable accuracy is available from a single volume gauge, which sets a
+floor under how much of the result can be attributed to the attack signatures themselves.
+
+### Limitation: R2 needs two consecutive snapshots
+
+R2's deltas require the previous observation of the same `(src, dst, in_port)` key. That
+means a row cannot be scored until a second snapshot of that flow has arrived. For a live
+capture that is a one-polling-interval delay. For any **manual-entry mode**, where a row is
+typed or pasted in one at a time with no history, R2 cannot be computed at all — only R1's
+single-row features are available. R2 is therefore not a drop-in replacement for the current
+feature set in every deployment context.
+
+### What section 7 does not show
+
+- It does not show that the rate features detect attack behaviour better. R2 scored *lower*
+  than the cumulative counters on identical rows.
+- It does not show that the section 2 extrapolation hypothesis was correct. The trees did
+  recover, which is consistent with it, but R1's lifetime-average rates still grow with time
+  and the confound baselines offer a competing explanation for the same numbers.
+- It does not identify why the models disagree on the scapy file.
