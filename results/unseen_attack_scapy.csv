@@ -1,0 +1,5 @@
+Assigned_Class,Predicted_Count,Percentage,Traffic_Type
+SQLInjection,28244,96.54,Unseen Attack (Scapy)
+Probe,849,2.9,Unseen Attack (Scapy)
+CMD,113,0.39,Unseen Attack (Scapy)
+Normal,51,0.17,Unseen Attack (Scapy)

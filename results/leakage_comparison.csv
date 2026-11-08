@@ -1,0 +1,3 @@
+Split_Type,Accuracy,Macro_F1,Test_Rows,Duplicate_Feature_Rows_In_Test,Duplicate_Test_Percentage,Methodology_Note
+Old Random 80/20 Split,1.0,1.0,93659,1178,1.26,Random shuffle leaks consecutive counter snapshots into test
+New Temporal 70/30 Split (200-row gap),0.3978,0.3774,139233,0,0.0,Strictly chronological by port_duration_sec with purge gap

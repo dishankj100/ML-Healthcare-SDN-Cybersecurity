@@ -1,0 +1,5 @@
+File,Description,Total_Rows,Classified_As_Normal_Count,Percent_Normal (True Negative Rate),Top_False_Positive_Attacks,Traffic_Type
+normal_iperf.csv,Normal (iPerf load generator),36076,89,0.25,"SQLInjection: 35645 (98.8%), CMD: 206 (0.6%), Probe: 87 (0.2%)",Unseen Normal
+normal_internet1.csv,Normal (Internet trace 1),30419,28371,93.27,CMD: 2048 (6.7%),Unseen Normal
+normal_internet2.csv,Normal (Internet trace 2),4572,4442,97.16,"CMD: 129 (2.8%), Smaba: 1 (0.0%)",Unseen Normal
+normal_internet3.csv,Normal (Internet trace 3),30224,28255,93.49,CMD: 1969 (6.5%),Unseen Normal
