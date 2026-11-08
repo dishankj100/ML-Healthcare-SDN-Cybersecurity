@@ -1,0 +1,21 @@
+Model,File,Traffic_Type,Total_Rows,Classified_As_Normal_Count,Percent_Normal,Label_Distribution,Top_Non_Normal_Labels,Temporal_Test_Accuracy
+Logistic Regression (scaled),normal_iperf.csv,Unseen Normal,36076,5865,16.26,"BruteForce: 27988 (77.58%), Normal: 5865 (16.26%), CMD: 1870 (5.18%), SQLInjection: 353 (0.98%)","BruteForce: 27988 (77.58%), CMD: 1870 (5.18%), SQLInjection: 353 (0.98%)",0.9598
+Logistic Regression (scaled),normal_internet1.csv,Unseen Normal,30419,2729,8.97,"CMD: 27677 (90.99%), Normal: 2729 (8.97%), Smaba: 13 (0.04%)","CMD: 27677 (90.99%), Smaba: 13 (0.04%)",0.9598
+Logistic Regression (scaled),normal_internet2.csv,Unseen Normal,4572,2956,64.65,"Normal: 2956 (64.65%), CMD: 1593 (34.84%), Smaba: 23 (0.50%)","CMD: 1593 (34.84%), Smaba: 23 (0.50%)",0.9598
+Logistic Regression (scaled),normal_internet3.csv,Unseen Normal,30224,2908,9.62,"CMD: 27299 (90.32%), Normal: 2908 (9.62%), Smaba: 17 (0.06%)","CMD: 27299 (90.32%), Smaba: 17 (0.06%)",0.9598
+Logistic Regression (scaled),ddos_attack_scapy_new.csv,Unseen Attack (Scapy DDoS),29257,0,0.0,UDPDDOS: 29257 (100.00%),UDPDDOS: 29257 (100.00%),0.9598
+KNN (scaled),normal_iperf.csv,Unseen Normal,36076,2,0.01,"SQLInjection: 35977 (99.73%), UDPDDOS: 97 (0.27%), Normal: 2 (0.01%)","SQLInjection: 35977 (99.73%), UDPDDOS: 97 (0.27%)",0.8185
+KNN (scaled),normal_internet1.csv,Unseen Normal,30419,3121,10.26,"CMD: 27214 (89.46%), Normal: 3121 (10.26%), Smaba: 84 (0.28%)","CMD: 27214 (89.46%), Smaba: 84 (0.28%)",0.8185
+KNN (scaled),normal_internet2.csv,Unseen Normal,4572,3434,75.11,"Normal: 3434 (75.11%), CMD: 1051 (22.99%), Smaba: 85 (1.86%), UDPDDOS: 2 (0.04%)","CMD: 1051 (22.99%), Smaba: 85 (1.86%), UDPDDOS: 2 (0.04%)",0.8185
+KNN (scaled),normal_internet3.csv,Unseen Normal,30224,3379,11.18,"CMD: 26752 (88.51%), Normal: 3379 (11.18%), Smaba: 93 (0.31%)","CMD: 26752 (88.51%), Smaba: 93 (0.31%)",0.8185
+KNN (scaled),ddos_attack_scapy_new.csv,Unseen Attack (Scapy DDoS),29257,0,0.0,"SQLInjection: 29092 (99.44%), UDPDDOS: 148 (0.51%), Probe: 17 (0.06%)","SQLInjection: 29092 (99.44%), UDPDDOS: 148 (0.51%), Probe: 17 (0.06%)",0.8185
+LightGBM,normal_iperf.csv,Unseen Normal,36076,78,0.22,"UDPDDOS: 18782 (52.06%), SQLInjection: 16958 (47.01%), CMD: 206 (0.57%), Normal: 78 (0.22%), BruteForce: 52 (0.14%)","UDPDDOS: 18782 (52.06%), SQLInjection: 16958 (47.01%), CMD: 206 (0.57%), BruteForce: 52 (0.14%)",0.5412
+LightGBM,normal_internet1.csv,Unseen Normal,30419,18731,61.58,"Normal: 18731 (61.58%), CMD: 11189 (36.78%), UDPDDOS: 448 (1.47%), Smaba: 51 (0.17%)","CMD: 11189 (36.78%), UDPDDOS: 448 (1.47%), Smaba: 51 (0.17%)",0.5412
+LightGBM,normal_internet2.csv,Unseen Normal,4572,2819,61.66,"Normal: 2819 (61.66%), CMD: 1251 (27.36%), UDPDDOS: 436 (9.54%), Smaba: 66 (1.44%)","CMD: 1251 (27.36%), UDPDDOS: 436 (9.54%), Smaba: 66 (1.44%)",0.5412
+LightGBM,normal_internet3.csv,Unseen Normal,30224,18407,60.9,"Normal: 18407 (60.90%), CMD: 11348 (37.55%), UDPDDOS: 393 (1.30%), Smaba: 76 (0.25%)","CMD: 11348 (37.55%), UDPDDOS: 393 (1.30%), Smaba: 76 (0.25%)",0.5412
+LightGBM,ddos_attack_scapy_new.csv,Unseen Attack (Scapy DDoS),29257,28707,98.12,"Normal: 28707 (98.12%), CMD: 539 (1.84%), SQLInjection: 11 (0.04%)","CMD: 539 (1.84%), SQLInjection: 11 (0.04%)",0.5412
+Random Forest,normal_iperf.csv,Unseen Normal,36076,89,0.25,"SQLInjection: 35645 (98.81%), CMD: 206 (0.57%), Normal: 89 (0.25%), Probe: 87 (0.24%), BruteForce: 49 (0.14%)","SQLInjection: 35645 (98.81%), CMD: 206 (0.57%), Probe: 87 (0.24%), BruteForce: 49 (0.14%)",0.3978
+Random Forest,normal_internet1.csv,Unseen Normal,30419,28371,93.27,"Normal: 28371 (93.27%), CMD: 2048 (6.73%)",CMD: 2048 (6.73%),0.3978
+Random Forest,normal_internet2.csv,Unseen Normal,4572,4442,97.16,"Normal: 4442 (97.16%), CMD: 129 (2.82%), Smaba: 1 (0.02%)","CMD: 129 (2.82%), Smaba: 1 (0.02%)",0.3978
+Random Forest,normal_internet3.csv,Unseen Normal,30224,28255,93.49,"Normal: 28255 (93.49%), CMD: 1969 (6.51%)",CMD: 1969 (6.51%),0.3978
+Random Forest,ddos_attack_scapy_new.csv,Unseen Attack (Scapy DDoS),29257,51,0.17,"SQLInjection: 28244 (96.54%), Probe: 849 (2.90%), CMD: 113 (0.39%), Normal: 51 (0.17%)","SQLInjection: 28244 (96.54%), Probe: 849 (2.90%), CMD: 113 (0.39%)",0.3978
