@@ -1,0 +1,9 @@
+Baseline,Test_Accuracy,Macro_F1,Weighted_F1,Features_Used
+"Chance (uniform, 1/9)",0.1111,0.1111,0.1111,none (theoretical)
+Majority class (UDPDDOS),0.1803,0.034,0.0551,none (constant prediction)
+Logistic Regression (scaled) on port_duration_sec only,0.1617,0.0893,0.1058,port_duration_sec
+Random Forest on port_duration_sec only,0.0874,0.0414,0.0325,port_duration_sec
+Logistic Regression (scaled) on table_active_count only,0.5947,0.4308,0.5026,table_active_count
+Random Forest on table_active_count only,0.6549,0.5894,0.6317,table_active_count
+Random Forest on 9 cumulative counters (reference),0.3978,0.3774,0.4197,9 fixed features
+Logistic Regression on 9 cumulative counters (reference),0.9598,0.9496,0.9574,9 fixed features
