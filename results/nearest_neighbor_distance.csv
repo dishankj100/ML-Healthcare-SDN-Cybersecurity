@@ -1,0 +1,3 @@
+Split,Train_Rows,Test_Rows_Sampled,Median_Distance,P90_Distance,Min_Distance,Max_Distance,Share_Distance_Zero_Pct,Count_Distance_Zero,Share_Distance_Under_0.01_Pct,Share_Distance_Under_0.1_Pct
+Old Random 80/20 Split,374632,20000,0.001734,0.022427,0.0,1.834972,1.28,256,78.535,98.855
+Temporal 70/30 Split (200-row gap),329058,20000,0.254688,1.66142,0.000751,4.61938,0.0,0,2.15,30.595
