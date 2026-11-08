@@ -1,0 +1,73 @@
+Model,Class,Precision,Recall,F1_Score,Support
+Decision Tree,BruteForce,1.0,0.264,0.4177,12104
+Decision Tree,CMD,0.6205,1.0,0.7658,12379
+Decision Tree,Normal,0.7108,1.0,0.831,11524
+Decision Tree,Probe,1.0,0.5844,0.7377,11275
+Decision Tree,SQLInjection,0.6241,0.6615,0.6423,22364
+Decision Tree,Smaba,1.0,1.0,1.0,14138
+Decision Tree,TCPDDOS,0.5922,1.0,0.7439,18172
+Decision Tree,UDPDDOS,1.0,0.5016,0.6681,25110
+Decision Tree,VNC,1.0,1.0,1.0,12167
+Random Forest,BruteForce,0.9958,1.0,0.9979,12104
+Random Forest,CMD,0.6205,1.0,0.7658,12379
+Random Forest,Normal,0.9998,1.0,0.9999,11524
+Random Forest,Probe,1.0,1.0,1.0,11275
+Random Forest,SQLInjection,1.0,0.6592,0.7946,22364
+Random Forest,Smaba,0.9996,1.0,0.9998,14138
+Random Forest,TCPDDOS,1.0,1.0,1.0,18172
+Random Forest,UDPDDOS,1.0,0.9999,1.0,25110
+Random Forest,VNC,1.0,0.9996,0.9998,12167
+KNN,BruteForce,1.0,1.0,1.0,12104
+KNN,CMD,0.8511,1.0,0.9196,12379
+KNN,Normal,1.0,1.0,1.0,11524
+KNN,Probe,1.0,1.0,1.0,11275
+KNN,SQLInjection,1.0,0.9032,0.9491,22364
+KNN,Smaba,0.7907,1.0,0.8831,14138
+KNN,TCPDDOS,0.9999,1.0,1.0,18172
+KNN,UDPDDOS,1.0,1.0,1.0,25110
+KNN,VNC,1.0,0.6923,0.8182,12167
+Naive Bayes,BruteForce,0.9825,0.7222,0.8325,12104
+Naive Bayes,CMD,0.5069,1.0,0.6728,12379
+Naive Bayes,Normal,1.0,0.9817,0.9908,11524
+Naive Bayes,Probe,0.9937,0.9859,0.9898,11275
+Naive Bayes,SQLInjection,1.0,0.6121,0.7594,22364
+Naive Bayes,Smaba,0.9223,0.998,0.9587,14138
+Naive Bayes,TCPDDOS,0.589,1.0,0.7414,18172
+Naive Bayes,UDPDDOS,0.9932,0.5,0.6651,25110
+Naive Bayes,VNC,1.0,0.8988,0.9467,12167
+Logistic Regression,BruteForce,1.0,1.0,1.0,12104
+Logistic Regression,CMD,1.0,1.0,1.0,12379
+Logistic Regression,Normal,1.0,1.0,1.0,11524
+Logistic Regression,Probe,1.0,0.9993,0.9996,11275
+Logistic Regression,SQLInjection,1.0,1.0,1.0,22364
+Logistic Regression,Smaba,0.6768,1.0,0.8073,14138
+Logistic Regression,TCPDDOS,0.9995,1.0,0.9998,18172
+Logistic Regression,UDPDDOS,1.0,1.0,1.0,25110
+Logistic Regression,VNC,1.0,0.4451,0.616,12167
+AdaBoost,BruteForce,1.0,0.0023,0.0046,12104
+AdaBoost,CMD,0.4852,0.0199,0.0382,12379
+AdaBoost,Normal,1.0,0.9951,0.9976,11524
+AdaBoost,Probe,1.0,1.0,1.0,11275
+AdaBoost,SQLInjection,0.4784,0.9906,0.6452,22364
+AdaBoost,Smaba,0.9961,1.0,0.998,14138
+AdaBoost,TCPDDOS,1.0,0.9994,0.9997,18172
+AdaBoost,UDPDDOS,0.9996,1.0,0.9998,25110
+AdaBoost,VNC,1.0,1.0,1.0,12167
+XGBoost,BruteForce,1.0,0.7036,0.826,12104
+XGBoost,CMD,1.0,1.0,1.0,12379
+XGBoost,Normal,1.0,1.0,1.0,11524
+XGBoost,Probe,1.0,1.0,1.0,11275
+XGBoost,SQLInjection,0.8617,1.0,0.9257,22364
+XGBoost,Smaba,1.0,1.0,1.0,14138
+XGBoost,TCPDDOS,1.0,1.0,1.0,18172
+XGBoost,UDPDDOS,0.6815,1.0,0.8106,25110
+XGBoost,VNC,1.0,0.0353,0.0683,12167
+LightGBM,BruteForce,1.0,0.7421,0.8519,12104
+LightGBM,CMD,0.5798,1.0,0.734,12379
+LightGBM,Normal,1.0,1.0,1.0,11524
+LightGBM,Probe,1.0,0.0049,0.0097,11275
+LightGBM,SQLInjection,1.0,0.7385,0.8496,22364
+LightGBM,Smaba,0.9324,1.0,0.965,14138
+LightGBM,TCPDDOS,0.9777,1.0,0.9887,18172
+LightGBM,UDPDDOS,0.6991,1.0,0.8229,25110
+LightGBM,VNC,1.0,0.9158,0.956,12167

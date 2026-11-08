@@ -1,0 +1,10 @@
+Class,Rows_Total,Distinct_Keys,Dropped_First_Observation,Dropped_Zero_Time_Change,Dropped_Negative_Delta,Rows_Retained,Retained_Pct,Time_Delta_Median,Time_Delta_P90,Time_Delta_Zero_Pct,Zero_Denom_ip_packet,Zero_Denom_rx_packets
+Normal,39077,10,10,111,1,38955,99.69,1.0,1.0,0.28,1171,0
+BruteForce,41011,2,2,2,0,41007,99.99,1.0,2.0,0.0,6344,0
+CMD,41928,2,2,43,0,41883,99.89,1.0,3.0,0.1,5855,0
+TCPDDOS,61237,6,6,342,0,60889,99.43,1.0,1.0,0.56,60850,0
+UDPDDOS,84366,6,6,1832,0,82528,97.82,1.0,1.0,2.17,41942,0
+Probe,38247,2,2,158,0,38087,99.58,1.0,5.0,0.41,11795,0
+Smaba,47793,2,2,31,0,47760,99.93,1.0,11.0,0.06,2272,0
+SQLInjection,75212,2,2,12,0,75198,99.98,1.0,3.0,0.02,12257,0
+VNC,41220,2,2,0,0,41218,100.0,1.0,9.0,0.0,60,0

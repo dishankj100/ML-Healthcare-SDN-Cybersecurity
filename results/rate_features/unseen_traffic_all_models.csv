@@ -1,0 +1,81 @@
+Feature_Set,Model,File,Traffic_Type,Rows_Scored,Classified_As_Normal_Count,Percent_Normal,Label_Distribution
+R1,Decision Tree,normal_iperf.csv,Unseen Normal,36076,18,0.05,"BruteForce: 35767 (99.14%), CMD: 291 (0.81%), Normal: 18 (0.05%)"
+R1,Random Forest,normal_iperf.csv,Unseen Normal,36076,2,0.01,"BruteForce: 35767 (99.14%), Probe: 307 (0.85%), Normal: 2 (0.01%)"
+R1,KNN,normal_iperf.csv,Unseen Normal,36076,0,0.0,"CMD: 28009 (77.64%), UDPDDOS: 7661 (21.24%), Probe: 406 (1.13%)"
+R1,Naive Bayes,normal_iperf.csv,Unseen Normal,36076,0,0.0,"BruteForce: 28408 (78.74%), UDPDDOS: 7199 (19.96%), CMD: 423 (1.17%), Probe: 43 (0.12%), SQLInjection: 3 (0.01%)"
+R1,Logistic Regression,normal_iperf.csv,Unseen Normal,36076,7159,19.84,"CMD: 28389 (78.69%), Normal: 7159 (19.84%), BruteForce: 525 (1.46%), Probe: 3 (0.01%)"
+R1,AdaBoost,normal_iperf.csv,Unseen Normal,36076,0,0.0,"BruteForce: 35767 (99.14%), Probe: 307 (0.85%), VNC: 2 (0.01%)"
+R1,XGBoost,normal_iperf.csv,Unseen Normal,36076,0,0.0,"Probe: 36074 (99.99%), UDPDDOS: 2 (0.01%)"
+R1,LightGBM,normal_iperf.csv,Unseen Normal,36076,208,0.58,"Probe: 35866 (99.42%), Normal: 208 (0.58%), CMD: 2 (0.01%)"
+R2,Decision Tree,normal_iperf.csv,Unseen Normal,34862,14128,40.53,"Normal: 14128 (40.53%), Smaba: 10794 (30.96%), BruteForce: 9894 (28.38%), VNC: 45 (0.13%), SQLInjection: 1 (0.00%)"
+R2,Random Forest,normal_iperf.csv,Unseen Normal,34862,16737,48.01,"Normal: 16737 (48.01%), Smaba: 9924 (28.47%), SQLInjection: 7933 (22.76%), VNC: 147 (0.42%), BruteForce: 121 (0.35%)"
+R2,KNN,normal_iperf.csv,Unseen Normal,34862,5664,16.25,"SQLInjection: 9508 (27.27%), Smaba: 8520 (24.44%), Probe: 8114 (23.27%), Normal: 5664 (16.25%), VNC: 2641 (7.58%), BruteForce: 309 (0.89%), CMD: 106 (0.30%)"
+R2,Naive Bayes,normal_iperf.csv,Unseen Normal,34862,5599,16.06,"SQLInjection: 16847 (48.32%), Probe: 6755 (19.38%), Normal: 5599 (16.06%), BruteForce: 5297 (15.19%), CMD: 360 (1.03%), Smaba: 4 (0.01%)"
+R2,Logistic Regression,normal_iperf.csv,Unseen Normal,34862,5889,16.89,"BruteForce: 21094 (60.51%), Smaba: 7376 (21.16%), Normal: 5889 (16.89%), Probe: 503 (1.44%)"
+R2,AdaBoost,normal_iperf.csv,Unseen Normal,34862,34862,100.0,Normal: 34862 (100.00%)
+R2,XGBoost,normal_iperf.csv,Unseen Normal,34862,34735,99.64,"Normal: 34735 (99.64%), BruteForce: 127 (0.36%)"
+R2,LightGBM,normal_iperf.csv,Unseen Normal,34862,7794,22.36,"SQLInjection: 15136 (43.42%), Normal: 7794 (22.36%), Smaba: 5102 (14.63%), VNC: 3573 (10.25%), BruteForce: 1885 (5.41%), CMD: 880 (2.52%), Probe: 492 (1.41%)"
+R1,Decision Tree,normal_internet1.csv,Unseen Normal,30419,30419,100.0,Normal: 30419 (100.00%)
+R1,Random Forest,normal_internet1.csv,Unseen Normal,30419,30419,100.0,Normal: 30419 (100.00%)
+R1,KNN,normal_internet1.csv,Unseen Normal,30419,28877,94.93,"Normal: 28877 (94.93%), CMD: 1542 (5.07%)"
+R1,Naive Bayes,normal_internet1.csv,Unseen Normal,30419,5,0.02,"BruteForce: 30368 (99.83%), UDPDDOS: 25 (0.08%), TCPDDOS: 19 (0.06%), Normal: 5 (0.02%), Probe: 2 (0.01%)"
+R1,Logistic Regression,normal_internet1.csv,Unseen Normal,30419,30418,100.0,"Normal: 30418 (100.00%), CMD: 1 (0.00%)"
+R1,AdaBoost,normal_internet1.csv,Unseen Normal,30419,16351,53.75,"Normal: 16351 (53.75%), Smaba: 13473 (44.29%), SQLInjection: 595 (1.96%)"
+R1,XGBoost,normal_internet1.csv,Unseen Normal,30419,18763,61.68,"Normal: 18763 (61.68%), UDPDDOS: 11656 (38.32%)"
+R1,LightGBM,normal_internet1.csv,Unseen Normal,30419,18766,61.69,"Normal: 18766 (61.69%), CMD: 11493 (37.78%), UDPDDOS: 160 (0.53%)"
+R2,Decision Tree,normal_internet1.csv,Unseen Normal,30415,18391,60.47,"Normal: 18391 (60.47%), BruteForce: 5851 (19.24%), Smaba: 2921 (9.60%), SQLInjection: 2610 (8.58%), CMD: 529 (1.74%), VNC: 113 (0.37%)"
+R2,Random Forest,normal_internet1.csv,Unseen Normal,30415,23015,75.67,"Normal: 23015 (75.67%), BruteForce: 5136 (16.89%), Smaba: 1423 (4.68%), Probe: 462 (1.52%), SQLInjection: 210 (0.69%), VNC: 152 (0.50%), CMD: 15 (0.05%), UDPDDOS: 1 (0.00%), TCPDDOS: 1 (0.00%)"
+R2,KNN,normal_internet1.csv,Unseen Normal,30415,21709,71.38,"Normal: 21709 (71.38%), SQLInjection: 4402 (14.47%), CMD: 2294 (7.54%), Smaba: 1131 (3.72%), BruteForce: 732 (2.41%), VNC: 146 (0.48%), Probe: 1 (0.00%)"
+R2,Naive Bayes,normal_internet1.csv,Unseen Normal,30415,18315,60.22,"Normal: 18315 (60.22%), BruteForce: 4767 (15.67%), SQLInjection: 2815 (9.26%), CMD: 2421 (7.96%), VNC: 1874 (6.16%), Smaba: 223 (0.73%)"
+R2,Logistic Regression,normal_internet1.csv,Unseen Normal,30415,21600,71.02,"Normal: 21600 (71.02%), UDPDDOS: 5095 (16.75%), BruteForce: 3602 (11.84%), Smaba: 118 (0.39%)"
+R2,AdaBoost,normal_internet1.csv,Unseen Normal,30415,8419,27.68,"SQLInjection: 21996 (72.32%), Normal: 8419 (27.68%)"
+R2,XGBoost,normal_internet1.csv,Unseen Normal,30415,17531,57.64,"Normal: 17531 (57.64%), BruteForce: 9398 (30.90%), Smaba: 2195 (7.22%), SQLInjection: 1181 (3.88%), VNC: 72 (0.24%), UDPDDOS: 25 (0.08%), CMD: 10 (0.03%), Probe: 3 (0.01%)"
+R2,LightGBM,normal_internet1.csv,Unseen Normal,30415,18312,60.21,"Normal: 18312 (60.21%), BruteForce: 7864 (25.86%), Smaba: 2063 (6.78%), Probe: 1347 (4.43%), SQLInjection: 402 (1.32%), CMD: 211 (0.69%), UDPDDOS: 136 (0.45%), VNC: 80 (0.26%)"
+R1,Decision Tree,normal_internet2.csv,Unseen Normal,4572,4572,100.0,Normal: 4572 (100.00%)
+R1,Random Forest,normal_internet2.csv,Unseen Normal,4572,4572,100.0,Normal: 4572 (100.00%)
+R1,KNN,normal_internet2.csv,Unseen Normal,4572,4138,90.51,"Normal: 4138 (90.51%), CMD: 434 (9.49%)"
+R1,Naive Bayes,normal_internet2.csv,Unseen Normal,4572,2,0.04,"BruteForce: 4547 (99.45%), TCPDDOS: 18 (0.39%), UDPDDOS: 4 (0.09%), Normal: 2 (0.04%), Probe: 1 (0.02%)"
+R1,Logistic Regression,normal_internet2.csv,Unseen Normal,4572,4571,99.98,"Normal: 4571 (99.98%), CMD: 1 (0.02%)"
+R1,AdaBoost,normal_internet2.csv,Unseen Normal,4572,2491,54.48,"Normal: 2491 (54.48%), Smaba: 2039 (44.60%), SQLInjection: 42 (0.92%)"
+R1,XGBoost,normal_internet2.csv,Unseen Normal,4572,2820,61.68,"Normal: 2820 (61.68%), UDPDDOS: 1752 (38.32%)"
+R1,LightGBM,normal_internet2.csv,Unseen Normal,4572,2820,61.68,"Normal: 2820 (61.68%), CMD: 1656 (36.22%), UDPDDOS: 96 (2.10%)"
+R2,Decision Tree,normal_internet2.csv,Unseen Normal,4568,2768,60.6,"Normal: 2768 (60.60%), BruteForce: 873 (19.11%), Smaba: 435 (9.52%), SQLInjection: 397 (8.69%), CMD: 80 (1.75%), VNC: 15 (0.33%)"
+R2,Random Forest,normal_internet2.csv,Unseen Normal,4568,3448,75.48,"Normal: 3448 (75.48%), BruteForce: 781 (17.10%), Smaba: 213 (4.66%), Probe: 63 (1.38%), SQLInjection: 33 (0.72%), VNC: 30 (0.66%)"
+R2,KNN,normal_internet2.csv,Unseen Normal,4568,3266,71.5,"Normal: 3266 (71.50%), SQLInjection: 662 (14.49%), CMD: 314 (6.87%), Smaba: 175 (3.83%), BruteForce: 138 (3.02%), VNC: 13 (0.28%)"
+R2,Naive Bayes,normal_internet2.csv,Unseen Normal,4568,2776,60.77,"Normal: 2776 (60.77%), BruteForce: 717 (15.70%), SQLInjection: 406 (8.89%), CMD: 364 (7.97%), VNC: 271 (5.93%), Smaba: 34 (0.74%)"
+R2,Logistic Regression,normal_internet2.csv,Unseen Normal,4568,3269,71.56,"Normal: 3269 (71.56%), UDPDDOS: 731 (16.00%), BruteForce: 558 (12.22%), Smaba: 10 (0.22%)"
+R2,AdaBoost,normal_internet2.csv,Unseen Normal,4568,1328,29.07,"SQLInjection: 3240 (70.93%), Normal: 1328 (29.07%)"
+R2,XGBoost,normal_internet2.csv,Unseen Normal,4568,2642,57.84,"Normal: 2642 (57.84%), BruteForce: 1378 (30.17%), Smaba: 339 (7.42%), SQLInjection: 181 (3.96%), VNC: 18 (0.39%), UDPDDOS: 7 (0.15%), CMD: 2 (0.04%), Probe: 1 (0.02%)"
+R2,LightGBM,normal_internet2.csv,Unseen Normal,4568,2754,60.29,"Normal: 2754 (60.29%), BruteForce: 1186 (25.96%), Smaba: 317 (6.94%), Probe: 196 (4.29%), SQLInjection: 52 (1.14%), CMD: 40 (0.88%), UDPDDOS: 13 (0.28%), VNC: 10 (0.22%)"
+R1,Decision Tree,normal_internet3.csv,Unseen Normal,30224,30224,100.0,Normal: 30224 (100.00%)
+R1,Random Forest,normal_internet3.csv,Unseen Normal,30224,30224,100.0,Normal: 30224 (100.00%)
+R1,KNN,normal_internet3.csv,Unseen Normal,30224,28982,95.89,"Normal: 28982 (95.89%), CMD: 1242 (4.11%)"
+R1,Naive Bayes,normal_internet3.csv,Unseen Normal,30224,7,0.02,"BruteForce: 30148 (99.75%), TCPDDOS: 37 (0.12%), UDPDDOS: 31 (0.10%), Normal: 7 (0.02%), Probe: 1 (0.00%)"
+R1,Logistic Regression,normal_internet3.csv,Unseen Normal,30224,30223,100.0,"Normal: 30223 (100.00%), CMD: 1 (0.00%)"
+R1,AdaBoost,normal_internet3.csv,Unseen Normal,30224,16477,54.52,"Normal: 16477 (54.52%), Smaba: 13439 (44.46%), SQLInjection: 308 (1.02%)"
+R1,XGBoost,normal_internet3.csv,Unseen Normal,30224,18441,61.01,"Normal: 18441 (61.01%), UDPDDOS: 11783 (38.99%)"
+R1,LightGBM,normal_internet3.csv,Unseen Normal,30224,18444,61.02,"Normal: 18444 (61.02%), CMD: 11673 (38.62%), UDPDDOS: 107 (0.35%)"
+R2,Decision Tree,normal_internet3.csv,Unseen Normal,30218,18242,60.37,"Normal: 18242 (60.37%), BruteForce: 5758 (19.05%), Smaba: 2899 (9.59%), SQLInjection: 2688 (8.90%), CMD: 527 (1.74%), VNC: 104 (0.34%)"
+R2,Random Forest,normal_internet3.csv,Unseen Normal,30218,22782,75.39,"Normal: 22782 (75.39%), BruteForce: 5166 (17.10%), Smaba: 1505 (4.98%), Probe: 390 (1.29%), SQLInjection: 225 (0.74%), VNC: 132 (0.44%), CMD: 16 (0.05%), TCPDDOS: 2 (0.01%)"
+R2,KNN,normal_internet3.csv,Unseen Normal,30218,21581,71.42,"Normal: 21581 (71.42%), SQLInjection: 4348 (14.39%), CMD: 2279 (7.54%), Smaba: 1136 (3.76%), BruteForce: 725 (2.40%), VNC: 147 (0.49%), Probe: 2 (0.01%)"
+R2,Naive Bayes,normal_internet3.csv,Unseen Normal,30218,18096,59.88,"Normal: 18096 (59.88%), BruteForce: 4692 (15.53%), SQLInjection: 2779 (9.20%), CMD: 2479 (8.20%), VNC: 1946 (6.44%), Smaba: 226 (0.75%)"
+R2,Logistic Regression,normal_internet3.csv,Unseen Normal,30218,21274,70.4,"Normal: 21274 (70.40%), UDPDDOS: 5075 (16.79%), BruteForce: 3767 (12.47%), Smaba: 102 (0.34%)"
+R2,AdaBoost,normal_internet3.csv,Unseen Normal,30218,8366,27.69,"SQLInjection: 21852 (72.31%), Normal: 8366 (27.69%)"
+R2,XGBoost,normal_internet3.csv,Unseen Normal,30218,17202,56.93,"Normal: 17202 (56.93%), BruteForce: 9467 (31.33%), Smaba: 2298 (7.60%), SQLInjection: 1130 (3.74%), VNC: 76 (0.25%), UDPDDOS: 34 (0.11%), CMD: 8 (0.03%), Probe: 3 (0.01%)"
+R2,LightGBM,normal_internet3.csv,Unseen Normal,30218,18044,59.71,"Normal: 18044 (59.71%), BruteForce: 7817 (25.87%), Smaba: 2126 (7.04%), Probe: 1391 (4.60%), SQLInjection: 345 (1.14%), CMD: 217 (0.72%), UDPDDOS: 180 (0.60%), VNC: 98 (0.32%)"
+R1,Decision Tree,ddos_attack_scapy_new.csv,Unseen Attack (Scapy DDoS),29257,14629,50.0,"Normal: 14629 (50.00%), CMD: 14628 (50.00%)"
+R1,Random Forest,ddos_attack_scapy_new.csv,Unseen Attack (Scapy DDoS),29257,0,0.0,Probe: 29257 (100.00%)
+R1,KNN,ddos_attack_scapy_new.csv,Unseen Attack (Scapy DDoS),29257,0,0.0,"UDPDDOS: 29128 (99.56%), Probe: 129 (0.44%)"
+R1,Naive Bayes,ddos_attack_scapy_new.csv,Unseen Attack (Scapy DDoS),29257,0,0.0,"UDPDDOS: 29216 (99.86%), BruteForce: 41 (0.14%)"
+R1,Logistic Regression,ddos_attack_scapy_new.csv,Unseen Attack (Scapy DDoS),29257,14390,49.18,"Normal: 14390 (49.18%), UDPDDOS: 13838 (47.30%), Probe: 1029 (3.52%)"
+R1,AdaBoost,ddos_attack_scapy_new.csv,Unseen Attack (Scapy DDoS),29257,0,0.0,"UDPDDOS: 14629 (50.00%), Probe: 14628 (50.00%)"
+R1,XGBoost,ddos_attack_scapy_new.csv,Unseen Attack (Scapy DDoS),29257,0,0.0,Probe: 29257 (100.00%)
+R1,LightGBM,ddos_attack_scapy_new.csv,Unseen Attack (Scapy DDoS),29257,0,0.0,Probe: 29257 (100.00%)
+R2,Decision Tree,ddos_attack_scapy_new.csv,Unseen Attack (Scapy DDoS),28912,14588,50.46,"Normal: 14588 (50.46%), BruteForce: 14324 (49.54%)"
+R2,Random Forest,ddos_attack_scapy_new.csv,Unseen Attack (Scapy DDoS),28912,28912,100.0,Normal: 28912 (100.00%)
+R2,KNN,ddos_attack_scapy_new.csv,Unseen Attack (Scapy DDoS),28912,0,0.0,"SQLInjection: 28551 (98.75%), Probe: 361 (1.25%)"
+R2,Naive Bayes,ddos_attack_scapy_new.csv,Unseen Attack (Scapy DDoS),28912,0,0.0,SQLInjection: 28912 (100.00%)
+R2,Logistic Regression,ddos_attack_scapy_new.csv,Unseen Attack (Scapy DDoS),28912,28912,100.0,Normal: 28912 (100.00%)
+R2,AdaBoost,ddos_attack_scapy_new.csv,Unseen Attack (Scapy DDoS),28912,0,0.0,SQLInjection: 28912 (100.00%)
+R2,XGBoost,ddos_attack_scapy_new.csv,Unseen Attack (Scapy DDoS),28912,28912,100.0,Normal: 28912 (100.00%)
+R2,LightGBM,ddos_attack_scapy_new.csv,Unseen Attack (Scapy DDoS),28912,28912,100.0,Normal: 28912 (100.00%)
