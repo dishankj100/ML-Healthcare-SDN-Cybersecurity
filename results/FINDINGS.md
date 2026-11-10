@@ -267,17 +267,20 @@ table.
 
 ### Did the Logistic Regression advantage shrink or vanish?
 
-It shrank under R1 and reversed under R2.
+It depends heavily on whether features are log-transformed, though on per-flow deltas (R2) the linear model trails tree ensembles.
 
-| Model | Original 9 counters | R1 | R2 |
-|---|---|---|---|
-| Logistic Regression | 0.9598 | 0.9515 | 0.6912 |
-| KNN | 0.8185 | 0.9576 | 0.7641 |
+With `max_iter=5000` (which eliminates all `ConvergenceWarning`s), Logistic Regression converges cleanly:
+- On **R1**: raw rates converge in 76 iterations (0.9515 accuracy, 0.9359 macro F1); with `log1p` applied to rate features (`ip_bytes_per_packet`, `port_rx_bytes_rate`, `port_tx_bytes_rate`, `port_rx_packets_rate`, `port_rx_bytes_per_packet`), it converges in 96 iterations to **0.9999** accuracy and **0.9999** macro F1.
+- On **R2**: raw rates converge in 430 iterations to **0.7259** accuracy (0.6697 macro F1), up from 0.6912 when iterations were capped at 100; with `log1p` on delta rates, it converges in 375 iterations to **0.6718** accuracy (0.6068 macro F1).
 
-Under R1, Logistic Regression (0.9515) is no longer best; KNN leads at 0.9576 and Random
-Forest is within 0.0063 of it at 0.9452. Under R2, Logistic Regression falls to 0.6912, well
-below Random Forest (0.8285) and LightGBM (0.8430). The large linear-model advantage seen on
-the cumulative counters does not survive once the growing counters are replaced by rates.
+| Model | Original 9 counters | R1 (raw) | R1 (log1p) | R2 (raw, converged) | R2 (log1p, converged) |
+|---|---|---|---|---|---|
+| Logistic Regression | 0.9598 | 0.9515 | 0.9999 | 0.7259 | 0.6718 |
+| Random Forest | 0.3978 | 0.9452 | — | 0.8286 | — |
+| LightGBM | 0.5412 | 0.8476 | — | 0.8342 | — |
+| KNN | 0.8185 | 0.9576 | — | 0.7688 | — |
+
+Under R1 with log1p rates, Logistic Regression recovers completely to 0.9999. Under R2, full convergence raises Logistic Regression to 0.7259, but it still trails Random Forest (0.8286) and LightGBM (0.8342) by 10–11 percentage points. Thus, the linear model's massive advantage on cumulative counters does not hold on per-flow interval rates (R2), where non-linear tree partitions capture the delta relationships more effectively.
 
 ### Is the comparison fair?
 

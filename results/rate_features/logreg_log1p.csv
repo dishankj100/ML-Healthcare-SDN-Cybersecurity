@@ -1,0 +1,5 @@
+Feature_Set,Variant,Max_Iter,Iterations_Used,Converged,Test_Accuracy,Macro_Precision,Macro_Recall,Macro_F1,Weighted_F1
+R1,raw (no log1p),5000,76,True,0.9515,0.964,0.9383,0.9359,0.9468
+R1,log1p rates,5000,96,True,0.9999,0.9999,0.9999,0.9999,0.9999
+R2,raw (no log1p),5000,430,True,0.7259,0.6745,0.6867,0.6697,0.6998
+R2,log1p rates,5000,375,True,0.6718,0.6119,0.6207,0.6068,0.645
