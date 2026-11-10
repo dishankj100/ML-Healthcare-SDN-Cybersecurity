@@ -1,0 +1,2 @@
+Model,Train_Rows,Test_Rows,Test_Accuracy,Macro_Precision,Macro_Recall,Macro_F1,Weighted_F1,Random_State,Scaling,Log_Transformed_Features
+"Random Forest (100 trees, R1, log1p rates)",329058,139233,0.9425,0.954,0.9602,0.9478,0.9426,42,StandardScaler (fit on train only),"ip_bytes_per_packet, port_rx_bytes_rate, port_tx_bytes_rate, port_rx_packets_rate, port_rx_bytes_per_packet"
