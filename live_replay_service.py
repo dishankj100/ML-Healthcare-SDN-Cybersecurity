@@ -4,9 +4,11 @@ HealthGuard AI: Live Replay Service
 Backend engine supporting the Live Lab Replay Simulation:
 - Streams real test-partition rows from MCAD-SDN dataset captures
 - Strictly isolates temporal test rows (rows after 70% train split + 200-row gap)
+- Supports UNSEEN SOURCE scenarios (normal_iperf.csv, normal_internet1.csv) streaming all rows
 - Evaluates using live_model.joblib (Random Forest on R1 temporal train set)
 - Computes global model feature importances
 - Dynamically parses honest limits from per_class_metrics.csv, confusion_matrix.csv, and audit CSVs
+- Strict manual input validation (negative numbers, duration <= 0, inconsistent packet counts, non-numeric)
 """
 
 import os
@@ -49,6 +51,11 @@ SCENARIOS = [
     ('VNC', 'Archieve/attack_vnc.csv')
 ]
 
+UNSEEN_SCENARIOS = [
+    ('UNSEEN: normal_iperf', 'Archieve/normal_iperf.csv'),
+    ('UNSEEN: normal_internet1', 'Archieve/normal_internet1.csv')
+]
+
 CLASS_NAMES = sorted([c[0] for c in SCENARIOS])
 CLASS_TO_ID = {n: i for i, n in enumerate(CLASS_NAMES)}
 ID_TO_CLASS = {i: n for i, n in enumerate(CLASS_NAMES)}
@@ -73,9 +80,11 @@ class LiveReplayService:
         self.model = None
         self.scaler = None
         self.test_cache = {}
+        self.unseen_cache = {}
         self.scenario_metadata = {}
         self.load_model()
         self.load_test_partitions()
+        self.load_unseen_sources()
 
     def load_model(self):
         if not os.path.exists(self.model_path):
@@ -87,7 +96,7 @@ class LiveReplayService:
     def load_test_partitions(self):
         """
         Loads and caches ONLY the temporal test partition (last ~30% after 200-row gap)
-        for each scenario. Train rows and gap rows are never stored in test_cache.
+        for each benchmark scenario. Train rows and gap rows are never stored in test_cache.
         """
         for cname, fpath in SCENARIOS:
             if not os.path.exists(fpath):
@@ -111,7 +120,31 @@ class LiveReplayService:
                 'train_rows': train_end,
                 'gap_rows': 200,
                 'test_start_index': test_start,
-                'test_rows': len(test_slice)
+                'test_rows': len(test_slice),
+                'is_unseen': False
+            }
+
+    def load_unseen_sources(self):
+        """
+        Loads UNSEEN source traffic files (normal_iperf.csv, normal_internet1.csv).
+        None of these rows were in training, so all rows are available for streaming.
+        """
+        for uname, fpath in UNSEEN_SCENARIOS:
+            if not os.path.exists(fpath):
+                continue
+            df = pd.read_csv(fpath, names=ALL_COLUMNS, low_memory=False)
+            for c in F9 + ['port_duration_sec', 'ip_duration']:
+                df[c] = pd.to_numeric(df[c], errors='coerce')
+            df = df.dropna(subset=F9 + ['port_duration_sec']).reset_index(drop=True)
+            df['dataset_row_index'] = df.index
+            self.unseen_cache[uname] = df
+            self.scenario_metadata[uname] = {
+                'total_clean_rows': len(df),
+                'train_rows': 0,
+                'gap_rows': 0,
+                'test_start_index': 0,
+                'test_rows': len(df),
+                'is_unseen': True
             }
 
     def derive_r1_features(self, raw_dict):
@@ -184,24 +217,34 @@ class LiveReplayService:
 
     def stream_next(self, scenario='Mixed random', row_idx=None):
         """
-        Fetches the next test row for auto-fetch streaming mode.
-        Draws strictly from the temporal test portion (after 70% + 200 gap).
+        Fetches the next row for auto-fetch streaming mode.
+        - For benchmark scenarios: draws strictly from temporal test portion (after 70% + 200 gap).
+        - For 'Mixed random': samples strictly from the 9 benchmark test portions.
+        - For UNSEEN scenarios: streams from all rows (none were in training), true_label = 'Normal (unseen source)'.
         """
-        if scenario == 'Mixed random' or scenario not in self.test_cache:
+        is_unseen = scenario in self.unseen_cache
+        if is_unseen:
+            df_stream = self.unseen_cache[scenario]
+            selected_scenario = scenario
+            true_label = "Normal (unseen source)"
+        elif scenario == 'Mixed random' or scenario not in self.test_cache:
             selected_scenario = random.choice(list(self.test_cache.keys()))
+            df_stream = self.test_cache[selected_scenario]
+            true_label = selected_scenario
         else:
             selected_scenario = scenario
+            df_stream = self.test_cache[selected_scenario]
+            true_label = selected_scenario
 
-        df_test = self.test_cache[selected_scenario]
         meta = self.scenario_metadata[selected_scenario]
-        total_test_rows = len(df_test)
+        total_rows = len(df_stream)
 
-        if row_idx is None or row_idx >= total_test_rows:
-            target_idx = random.randint(0, total_test_rows - 1) if scenario == 'Mixed random' else (0 if row_idx is not None else 0)
+        if row_idx is None or row_idx >= total_rows:
+            target_idx = random.randint(0, total_rows - 1) if scenario == 'Mixed random' else (0 if row_idx is not None else 0)
         else:
-            target_idx = row_idx % total_test_rows
+            target_idx = row_idx % total_rows
 
-        row = df_test.iloc[target_idx]
+        row = df_stream.iloc[target_idx]
         dataset_row_idx = int(row['dataset_row_index'])
 
         raw_dict = {
@@ -227,21 +270,28 @@ class LiveReplayService:
 
         pred_meta = CLASS_METADATA.get(pred_label, CLASS_METADATA['Normal'])
 
+        # Determine correctness: for unseen sources, true label is Normal
+        if is_unseen:
+            is_correct = (pred_label == 'Normal')
+        else:
+            is_correct = (pred_label == selected_scenario)
+
         return {
             'scenario': selected_scenario,
-            'true_label': selected_scenario,
+            'true_label': true_label,
+            'is_unseen_source': is_unseen,
             'test_row_index': target_idx,
             'dataset_row_index': dataset_row_idx,
             'test_start_index': meta['test_start_index'],
-            'total_scenario_test_rows': total_test_rows,
-            'next_index': (target_idx + 1) % total_test_rows,
+            'total_scenario_test_rows': total_rows,
+            'next_index': (target_idx + 1) % total_rows,
             'raw_parameters': raw_dict,
             'derived_features': derived_dict,
             'prediction': {
                 'class_id': pred_class_id,
                 'class_name': pred_label,
                 'is_attack': pred_label != 'Normal',
-                'is_correct': pred_label == selected_scenario,
+                'is_correct': is_correct,
                 'confidence': round(confidence, 4),
                 'confidence_pct': round(confidence * 100, 2),
                 'severity': pred_meta['severity'],
@@ -252,7 +302,13 @@ class LiveReplayService:
         }
 
     def predict_manual(self, form_data):
-        """Evaluates manual entry form inputs with strict validation."""
+        """
+        Evaluates manual entry form inputs with strict cybersecurity validation rules:
+        - Rejects non-numeric input with a clear error message
+        - Rejects negative values for any telemetry parameter
+        - Rejects port_duration_sec <= 0 (cannot compute rate or invalid uptime)
+        - Rejects inconsistent packet counts (packet == 0 with bytes > 0)
+        """
         required = [
             'ip_bytes', 'ip_packet', 'port_rx_bytes', 'port_tx_bytes',
             'port_rx_packets', 'port_duration_sec', 'port_flow_count', 'table_active_count'
@@ -262,16 +318,24 @@ class LiveReplayService:
         for k in required:
             if k not in form_data:
                 raise ValueError(f"Missing required telemetry parameter: '{k}'.")
+            val_raw = form_data[k]
             try:
-                val = float(form_data[k])
+                val = float(val_raw)
             except (ValueError, TypeError):
-                raise ValueError(f"Invalid parameter '{k}': expected numeric value, got '{form_data[k]}'.")
+                raise ValueError(f"Invalid non-numeric input for '{k}': expected numeric value, got '{val_raw}'.")
 
-            if k != 'port_duration_sec' and val < 0:
+            if val < 0:
                 raise ValueError(f"Invalid parameter '{k}': counters cannot be negative ({val}).")
             if k == 'port_duration_sec' and val <= 0:
-                raise ValueError(f"Invalid parameter 'port_duration_sec': switch duration must be strictly positive (> 0), got {val}.")
+                raise ValueError(f"Invalid parameter 'port_duration_sec': switch connection duration must be strictly positive (> 0), got {val}.")
             cleaned[k] = val
+
+        # Inconsistent packet telemetry validation
+        if cleaned['ip_packet'] == 0 and cleaned['ip_bytes'] > 0:
+            raise ValueError(f"Inconsistent packet telemetry: 'ip_packet' cannot be 0 when 'ip_bytes' is non-zero ({cleaned['ip_bytes']}).")
+
+        if cleaned['port_rx_packets'] == 0 and cleaned['port_rx_bytes'] > 0:
+            raise ValueError(f"Inconsistent packet telemetry: 'port_rx_packets' cannot be 0 when 'port_rx_bytes' is non-zero ({cleaned['port_rx_bytes']}).")
 
         r1_vec, derived_dict = self.derive_r1_features(cleaned)
         scaled_arr = self._transform_r1(r1_vec)
@@ -305,12 +369,17 @@ class LiveReplayService:
         Returns genuine test-set parameters for populating the manual example loader.
         Strictly draws from the temporal test portion (dataset_row_index >= test_start_index).
         """
-        if scenario not in self.test_cache:
-            scenario = 'Normal'
-        df_test = self.test_cache[scenario]
-        meta = self.scenario_metadata[scenario]
-        idx = offset % len(df_test)
-        sample = df_test.iloc[idx]
+        if scenario in self.unseen_cache:
+            df_sample = self.unseen_cache[scenario]
+            meta = self.scenario_metadata[scenario]
+        else:
+            if scenario not in self.test_cache:
+                scenario = 'Normal'
+            df_sample = self.test_cache[scenario]
+            meta = self.scenario_metadata[scenario]
+
+        idx = offset % len(df_sample)
+        sample = df_sample.iloc[idx]
         return {
             'scenario': scenario,
             'test_row_index': idx,

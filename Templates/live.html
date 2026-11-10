@@ -651,16 +651,22 @@
         <div class="controls-left">
           <label class="ctrl-label" for="scenarioSelect">Replay Scenario:</label>
           <select id="scenarioSelect" class="ctrl-select" onchange="onScenarioChange()">
-            <option value="Mixed random">Mixed random (All Test Classes)</option>
-            <option value="Normal">Normal (Benign ICU Traffic)</option>
-            <option value="BruteForce">BruteForce (Credential Spraying)</option>
-            <option value="CMD">CMD (Command Injection RCE)</option>
-            <option value="TCPDDOS">TCPDDOS (SYN Flood)</option>
-            <option value="UDPDDOS">UDPDDOS (UDP Flood)</option>
-            <option value="Probe">Probe (OS & Port Scan)</option>
-            <option value="Smaba">Smaba (Samba Exploit)</option>
-            <option value="SQLInjection">SQLInjection (Database Exploit)</option>
-            <option value="VNC">VNC (Remote Console Exploit)</option>
+            <optgroup label="Benchmark Scenarios (Temporal Test Split)">
+              <option value="Mixed random">Mixed random (All 9 Test Classes)</option>
+              <option value="Normal">Normal (Benign ICU Traffic)</option>
+              <option value="BruteForce">BruteForce (Credential Spraying)</option>
+              <option value="CMD">CMD (Command Injection RCE)</option>
+              <option value="TCPDDOS">TCPDDOS (SYN Flood)</option>
+              <option value="UDPDDOS">UDPDDOS (UDP Flood)</option>
+              <option value="Probe">Probe (OS & Port Scan)</option>
+              <option value="Smaba">Smaba (Samba Exploit)</option>
+              <option value="SQLInjection">SQLInjection (Database Exploit)</option>
+              <option value="VNC">VNC (Remote Console Exploit)</option>
+            </optgroup>
+            <optgroup label="UNSEEN SOURCE (not in training)">
+              <option value="UNSEEN: normal_iperf">UNSEEN SOURCE: normal_iperf.csv (All Rows)</option>
+              <option value="UNSEEN: normal_internet1">UNSEEN SOURCE: normal_internet1.csv (All Rows)</option>
+            </optgroup>
           </select>
 
           <label class="ctrl-label" for="speedSelect">Speed:</label>
@@ -763,16 +769,22 @@
             <div>
               <label style="font-size: 0.78rem; color: var(--text-dim); margin-right: 6px;">Load Example:</label>
               <select id="exampleSelect" class="ctrl-select" onchange="loadExample(this.value)">
-                <option value="">-- Select Test Row Example --</option>
-                <option value="Normal">Normal (Benign Test Row)</option>
-                <option value="BruteForce">BruteForce Test Row</option>
-                <option value="CMD">CMD Test Row</option>
-                <option value="TCPDDOS">TCPDDOS Test Row</option>
-                <option value="UDPDDOS">UDPDDOS Test Row</option>
-                <option value="Probe">Probe Test Row</option>
-                <option value="Smaba">Smaba Test Row</option>
-                <option value="SQLInjection">SQLInjection Test Row</option>
-                <option value="VNC">VNC Test Row</option>
+                <option value="">-- Select Example Row --</option>
+                <optgroup label="Benchmark Test Portion">
+                  <option value="Normal">Normal (Benign Test Row)</option>
+                  <option value="BruteForce">BruteForce Test Row</option>
+                  <option value="CMD">CMD Test Row</option>
+                  <option value="TCPDDOS">TCPDDOS Test Row</option>
+                  <option value="UDPDDOS">UDPDDOS Test Row</option>
+                  <option value="Probe">Probe Test Row</option>
+                  <option value="Smaba">Smaba Test Row</option>
+                  <option value="SQLInjection">SQLInjection Test Row</option>
+                  <option value="VNC">VNC Test Row</option>
+                </optgroup>
+                <optgroup label="UNSEEN SOURCE (not in training)">
+                  <option value="UNSEEN: normal_iperf">UNSEEN: normal_iperf.csv</option>
+                  <option value="UNSEEN: normal_internet1">UNSEEN: normal_internet1.csv</option>
+                </optgroup>
               </select>
             </div>
           </div>
@@ -1010,7 +1022,12 @@
       const p = data.prediction;
       banner.className = 'threat-banner';
 
-      if (p.is_attack) {
+      if (data.is_unseen_source && p.is_attack) {
+        banner.classList.add('warning');
+        badge.className = 'badge badge-high';
+        badge.textContent = 'FALSE ALARM (OOD)';
+        text.innerHTML = `<strong>${p.class_name}</strong> predicted on <strong>${data.true_label}</strong> (${p.confidence_pct}% conf). High-volume stress mimics attack signatures.`;
+      } else if (p.is_attack) {
         banner.classList.add('attack');
         badge.className = 'badge badge-critical';
         badge.textContent = p.severity + ' ATTACK';
@@ -1018,7 +1035,7 @@
       } else {
         badge.className = 'badge badge-safe';
         badge.textContent = 'NORMAL';
-        text.innerHTML = `<strong>Normal clinical telemetry</strong> verified with <strong>${p.confidence_pct}%</strong> confidence.`;
+        text.innerHTML = `<strong>Normal clinical telemetry</strong> verified with <strong>${p.confidence_pct}%</strong> confidence (True: <strong>${data.true_label}</strong>).`;
       }
 
       asset.textContent = `Target: ${p.target_asset}`;
@@ -1035,9 +1052,14 @@
       const der = data.derived_features;
 
       const tr = document.createElement('tr');
-      const statusHtml = p.is_correct
-        ? `<span style="color: var(--neon-emerald); font-weight: 600;">&#10003; MATCH</span>`
-        : `<span style="color: var(--neon-crimson); font-weight: 600;">&#10007; MISCLASSIFIED</span>`;
+      let statusHtml;
+      if (p.is_correct) {
+        statusHtml = `<span style="color: var(--neon-emerald); font-weight: 600;">&#10003; MATCH</span>`;
+      } else if (data.is_unseen_source) {
+        statusHtml = `<span style="color: var(--neon-amber); font-weight: 600;">&#9888; FALSE ALARM (${p.class_name})</span>`;
+      } else {
+        statusHtml = `<span style="color: var(--neon-crimson); font-weight: 600;">&#10007; MISCLASSIFIED</span>`;
+      }
 
       tr.innerHTML = `
         <td>${data.test_row_index}</td>
