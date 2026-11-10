@@ -354,7 +354,8 @@ Three things follow, and they are uncomfortable.
 3. **The class signal is concentrated in one gauge.** `table_active_count` is the number of
    active flow entries in the switch table. It is a property of how much traffic the scenario
    generated, not of what the traffic was doing. A model scoring 0.6549 from that one number
-   is reading traffic volume and session shape, not attack behaviour.
+   is consistent with the hypothesis that it is reading traffic volume and session shape rather
+   than attack behaviour.
 
 This is consistent with the capture-session confound described in section 5, but it does not
 prove it. Nothing here measures how much of the 0.9598 Logistic Regression accuracy is
