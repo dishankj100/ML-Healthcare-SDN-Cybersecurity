@@ -1,0 +1,9 @@
+Feature_Set,Model,Validation_Macro_F1,Test_Accuracy,Macro_Precision,Macro_Recall,Macro_F1,Weighted_F1,Best_Params,Tune_Time_Sec
+R2,Decision Tree,0.7919,0.8049,0.7938,0.7908,0.7922,0.8055,"{'max_depth': None, 'min_samples_split': 10}",12.89
+R2,Random Forest,0.8082,0.8286,0.8176,0.8133,0.8146,0.8268,"{'max_depth': None, 'min_samples_split': 5}",36.01
+R2,KNN,0.7441,0.7688,0.7483,0.7456,0.7465,0.7676,{'knn__n_neighbors': 7},7.24
+R2,Naive Bayes,0.5082,0.5841,0.5548,0.5528,0.5145,0.5558,{'var_smoothing': 1e-08},0.59
+R2,Logistic Regression,0.6053,0.6775,0.6155,0.6286,0.6137,0.6507,{'clf__C': 10.0},155.09
+R2,AdaBoost,0.5299,0.5667,0.5623,0.5476,0.5348,0.5499,"{'n_estimators': 100, 'learning_rate': 1.0}",85.23
+R2,XGBoost,0.8204,0.8433,0.8355,0.8252,0.8258,0.8378,"{'n_estimators': 100, 'max_depth': 6, 'learning_rate': 0.2}",39.36
+R2,LightGBM,0.8251,0.8342,0.8259,0.8176,0.8173,0.8296,"{'n_estimators': 100, 'num_leaves': 63, 'learning_rate': 0.1}",35.81
