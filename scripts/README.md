@@ -16,3 +16,4 @@ This directory contains the standalone offline diagnostic and experiment scripts
 - `audit_r1_lr.py`: Audits the 0.9999 test accuracy of R1 Logistic Regression with log1p across confusion matrix/recall, single-feature evaluations, drop-one ablation, drift/NN distance, and unseen traffic.
 - `compute_r1_nn_baseline.py`: Computes nearest-neighbour distances (20,000-row sample) strictly within R1 log1p space for random 80/20 and temporal 70/30 splits for valid same-space comparison.
 - `train_live_model.py`: Trains Random Forest (100 trees, random_state=42) on R1 single-row rate features on temporal train set; saves live_model.joblib and results/live_replay/model_metrics.csv.
+- `generate_confusion_matrix.py`: Evaluates live_model.joblib on the held-out temporal test set to generate the complete 9x9 confusion matrix saved to results/live_replay/confusion_matrix.csv.

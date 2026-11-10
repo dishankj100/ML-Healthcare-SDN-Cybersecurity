@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>Live Lab (Replay Simulation) - HEALTHGUARD AI</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-deep: #060a17;
+      --bg-surface: #0b1226;
+      --bg-card: rgba(15, 23, 42, 0.85);
+      --bg-card-hover: rgba(22, 33, 62, 0.95);
+      --bg-input: rgba(11, 18, 38, 0.9);
+      --bg-elevated: #101c38;
+      
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(59, 130, 246, 0.35);
+      --border-cyan: rgba(6, 182, 212, 0.4);
+      --border-crimson: rgba(239, 68, 68, 0.4);
+      --border-amber: rgba(245, 158, 11, 0.4);
+
+      --text-main: #f1f5f9;
+      --text-dim: #94a3b8;
+      --text-muted: #64748b;
+
+      --neon-cyan: #06b6d4;
+      --neon-blue: #3b82f6;
+      --neon-emerald: #10b981;
+      --neon-crimson: #ef4444;
+      --neon-amber: #f59e0b;
+      --neon-purple: #a855f7;
+
+      --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-deep);
+      background-image:
+        radial-gradient(at 10% 10%, rgba(59, 130, 246, 0.12) 0px, transparent 45%),
+        radial-gradient(at 90% 20%, rgba(6, 182, 212, 0.08) 0px, transparent 40%),
+        radial-gradient(at 50% 90%, rgba(168, 85, 247, 0.06) 0px, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(11, 18, 38, 0.6);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(59, 130, 246, 0.3);
+      border-radius: 4px;
+    }
+
+    /* Top Navigation Bar */
+    .top-nav {
+      height: 65px;
+      background: rgba(11, 18, 38, 0.95);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(10px);
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      background: linear-gradient(135deg, var(--neon-cyan), var(--neon-blue));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .brand-title {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .brand-title span {
+      color: var(--neon-cyan);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .nav-link {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: var(--text-main);
+      background: rgba(59, 130, 246, 0.15);
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+
+    /* Mandatory Disclaimer Banner */
+    .disclaimer-banner {
+      background: linear-gradient(90deg, rgba(245, 158, 11, 0.12), rgba(239, 68, 68, 0.12));
+      border: 1px solid var(--border-amber);
+      color: #fbbf24;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      padding: 0.75rem 1.5rem;
+      margin: 1.5rem 2rem 0.5rem 2rem;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.1);
+    }
+
+    .disclaimer-banner svg {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      fill: currentColor;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 1.5rem 2rem 3rem 2rem;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Mode Navigation Tabs */
+    .tabs-header {
+      display: flex;
+      gap: 1rem;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 0.75rem;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-dim);
+      font-family: var(--font-heading);
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 8px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+    }
+
+    .tab-btn.active {
+      background: rgba(6, 182, 212, 0.15);
+      border-color: var(--neon-cyan);
+      color: var(--neon-cyan);
+      box-shadow: 0 0 12px rgba(6, 182, 212, 0.2);
+    }
+
+    /* Content Panes */
+    .tab-pane {
+      display: none;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .tab-pane.active {
+      display: flex;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .card-title {
+      font-family: var(--font-heading);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    /* HUD Metrics Strip */
+    .hud-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .hud-item {
+      background: rgba(11, 18, 38, 0.6);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .hud-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-dim);
+    }
+
+    .hud-value {
+      font-family: var(--font-mono);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--neon-cyan);
+    }
+
+    /* Stream Controls Toolbar */
+    .controls-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      background: rgba(11, 18, 38, 0.8);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 0.85rem 1.25rem;
+    }
+
+    .controls-left, .controls-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    label.ctrl-label {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      font-weight: 500;
+    }
+
+    select.ctrl-select, input.ctrl-input {
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 7px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-family: var(--font-body);
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    select.ctrl-select:focus, input.ctrl-input:focus {
+      border-color: var(--neon-cyan);
+    }
+
+    .btn {
+      font-family: var(--font-heading);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--neon-cyan), var(--neon-blue));
+      color: #fff;
+      box-shadow: 0 0 12px rgba(6, 182, 212, 0.3);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 0 18px rgba(6, 182, 212, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: var(--border-crimson);
+      color: #fca5a5;
+    }
+
+    .btn-danger:hover {
+      background: rgba(239, 68, 68, 0.3);
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--border-subtle);
+      color: var(--text-dim);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--text-main);
+    }
+
+    /* Live Threat Alert Banner */
+    .threat-banner {
+      padding: 0.9rem 1.25rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(16, 185, 129, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .threat-banner.attack {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: var(--border-crimson);
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.25);
+    }
+
+    .threat-banner.warning {
+      background: rgba(245, 158, 11, 0.15);
+      border-color: var(--border-amber);
+    }
+
+    .threat-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .badge {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-safe { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .badge-critical { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+    .badge-high { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+    .badge-medium { background: rgba(6, 182, 212, 0.2); color: #38bdf8; border: 1px solid rgba(6, 182, 212, 0.4); }
+
+    /* Streaming Table */
+    .table-container {
+      overflow-x: auto;
+      max-height: 420px;
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+    }
+
+    table.soc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      font-family: var(--font-mono);
+    }
+
+    table.soc-table th {
+      background: var(--bg-surface);
+      color: var(--text-dim);
+      font-weight: 600;
+      text-align: left;
+      padding: 10px 14px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid var(--border-subtle);
+      white-space: nowrap;
+    }
+
+    table.soc-table td {
+      padding: 8px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      color: var(--text-main);
+      white-space: nowrap;
+    }
+
+    table.soc-table tr:hover td {
+      background: rgba(59, 130, 246, 0.08);
+    }
+
+    /* Manual Mode Grid Form */
+    .manual-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 1024px) {
+      .manual-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-inputs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .form-group label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+    }
+
+    .form-group input {
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      padding: 8px 12px;
+      border-radius: 6px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus {
+      border-color: var(--neon-cyan);
+    }
+
+    .derived-box {
+      background: rgba(11, 18, 38, 0.7);
+      border: 1px dashed var(--border-cyan);
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      margin-top: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+    }
+
+    .derived-item {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .derived-item span:first-child {
+      color: var(--text-muted);
+      font-size: 0.72rem;
+    }
+
+    .derived-item span:last-child {
+      color: var(--neon-cyan);
+      font-weight: 600;
+    }
+
+    /* Feature Importance & Honest Limits Panels */
+    .info-panels-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 1024px) {
+      .info-panels-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+    }
+
+    .bar-label {
+      width: 180px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: var(--text-dim);
+    }
+
+    .bar-track {
+      flex: 1;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-blue));
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+
+    .bar-val {
+      width: 50px;
+      text-align: right;
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .limits-card-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .caveat-box {
+      background: rgba(239, 68, 68, 0.1);
+      border-left: 3px solid var(--neon-crimson);
+      padding: 0.75rem 1rem;
+      border-radius: 0 6px 6px 0;
+      color: #fca5a5;
+      font-size: 0.82rem;
+    }
+
+    .hypothesis-box {
+      background: rgba(6, 182, 212, 0.1);
+      border-left: 3px solid var(--neon-cyan);
+      padding: 0.75rem 1rem;
+      border-radius: 0 6px 6px 0;
+      color: #a5f3fc;
+      font-size: 0.82rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <header class="top-nav">
+    <div class="brand-group">
+      <div class="brand-icon">HG</div>
+      <div class="brand-title">HEALTHGUARD AI &bull; <span>LIVE LAB</span></div>
+    </div>
+    <nav class="nav-links">
+      <a href="/soc" class="nav-link">SOC Dashboard</a>
+      <a href="/live" class="nav-link active">Live Replay Lab</a>
+      <a href="/" class="nav-link">Main System</a>
+    </nav>
+  </header>
+
+  <!-- Mandatory Replay Simulation Disclaimer Banner -->
+  <div class="disclaimer-banner">
+    <svg viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99zM11 10h2v4h-2zm0 6h2v2h-2z"/></svg>
+    <span>REPLAY SIMULATION: rows are streamed from the MCAD-SDN dataset test portion, not captured from a live network.</span>
+  </div>
+
+  <main class="container">
+
+    <!-- Mode Selector Tabs -->
+    <div class="tabs-header">
+      <button class="tab-btn active" id="tabAutoBtn" onclick="switchMode('auto')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+        Auto-Fetch Stream Replay
+      </button>
+      <button class="tab-btn" id="tabManualBtn" onclick="switchMode('manual')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+        Manual Telemetry Entry
+      </button>
+    </div>
+
+    <!-- PANE 1: AUTO-FETCH STREAM -->
+    <div class="tab-pane active" id="autoPane">
+      
+      <!-- Stream Controls Bar -->
+      <div class="controls-bar">
+        <div class="controls-left">
+          <label class="ctrl-label" for="scenarioSelect">Replay Scenario:</label>
+          <select id="scenarioSelect" class="ctrl-select" onchange="onScenarioChange()">
+            <option value="Mixed random">Mixed random (All Test Classes)</option>
+            <option value="Normal">Normal (Benign ICU Traffic)</option>
+            <option value="BruteForce">BruteForce (Credential Spraying)</option>
+            <option value="CMD">CMD (Command Injection RCE)</option>
+            <option value="TCPDDOS">TCPDDOS (SYN Flood)</option>
+            <option value="UDPDDOS">UDPDDOS (UDP Flood)</option>
+            <option value="Probe">Probe (OS & Port Scan)</option>
+            <option value="Smaba">Smaba (Samba Exploit)</option>
+            <option value="SQLInjection">SQLInjection (Database Exploit)</option>
+            <option value="VNC">VNC (Remote Console Exploit)</option>
+          </select>
+
+          <label class="ctrl-label" for="speedSelect">Speed:</label>
+          <select id="speedSelect" class="ctrl-select" onchange="updateSpeed()">
+            <option value="500">0.5s (Fast)</option>
+            <option value="1000" selected>1.0s (Normal)</option>
+            <option value="2000">2.0s (Slow)</option>
+          </select>
+        </div>
+
+        <div class="controls-right">
+          <button id="btnStart" class="btn btn-primary" onclick="startStream()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            Start Replay
+          </button>
+          <button id="btnStop" class="btn btn-secondary" onclick="stopStream()" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+            Pause
+          </button>
+          <button class="btn btn-secondary" onclick="resetStats()">Reset Counters</button>
+        </div>
+      </div>
+
+      <!-- Live Replay HUD Statistics -->
+      <div class="hud-grid">
+        <div class="hud-item">
+          <span class="hud-label">Streamed Packets</span>
+          <span class="hud-value" id="hudStreamed">0</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-label">Correct Detections</span>
+          <span class="hud-value" id="hudCorrect" style="color: var(--neon-emerald);">0</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-label">Misclassifications</span>
+          <span class="hud-value" id="hudMisclass" style="color: var(--neon-crimson);">0</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-label">Running Accuracy</span>
+          <span class="hud-value" id="hudAccuracy">100.00%</span>
+        </div>
+      </div>
+
+      <!-- Live Threat Alert Banner -->
+      <div class="threat-banner" id="threatBanner">
+        <div class="threat-meta">
+          <span class="badge badge-safe" id="threatBadge">STANDBY</span>
+          <span id="threatText" style="font-weight: 500;">Replay engine idle. Click 'Start Replay' to stream test rows.</span>
+        </div>
+        <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);" id="threatAsset">
+          Target: Medical Telemetry Channel
+        </div>
+      </div>
+
+      <!-- Streaming Table -->
+      <div class="card" style="padding: 1rem;">
+        <div class="card-title">
+          <span>Real-Time Streamed Packets (Temporal Test Rows)</span>
+          <span style="font-size: 0.75rem; color: var(--text-dim); font-weight: normal;" id="streamRowIndicator">Offset: 0</span>
+        </div>
+        <div class="table-container">
+          <table class="soc-table" id="streamTable">
+            <thead>
+              <tr>
+                <th>Test #</th>
+                <th>Dataset Row</th>
+                <th>True Label</th>
+                <th>Predicted</th>
+                <th>Confidence</th>
+                <th>Status</th>
+                <th>ip_bytes</th>
+                <th>ip_packet</th>
+                <th>rx_bytes/sec</th>
+                <th>tx_bytes/sec</th>
+                <th>rx_packets/sec</th>
+                <th>table_active</th>
+              </tr>
+            </thead>
+            <tbody id="streamTableBody">
+              <tr>
+                <td colspan="12" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                  No telemetry streamed yet. Start replay to observe classification.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- PANE 2: MANUAL ENTRY -->
+    <div class="tab-pane" id="manualPane">
+      
+      <div class="manual-grid">
+        <!-- Input Form -->
+        <div class="card">
+          <div class="card-title">
+            <span>Manual Telemetry Evaluation (Single Flow)</span>
+            <div>
+              <label style="font-size: 0.78rem; color: var(--text-dim); margin-right: 6px;">Load Example:</label>
+              <select id="exampleSelect" class="ctrl-select" onchange="loadExample(this.value)">
+                <option value="">-- Select Test Row Example --</option>
+                <option value="Normal">Normal (Benign Test Row)</option>
+                <option value="BruteForce">BruteForce Test Row</option>
+                <option value="CMD">CMD Test Row</option>
+                <option value="TCPDDOS">TCPDDOS Test Row</option>
+                <option value="UDPDDOS">UDPDDOS Test Row</option>
+                <option value="Probe">Probe Test Row</option>
+                <option value="Smaba">Smaba Test Row</option>
+                <option value="SQLInjection">SQLInjection Test Row</option>
+                <option value="VNC">VNC Test Row</option>
+              </select>
+            </div>
+          </div>
+
+          <form id="manualForm" onsubmit="submitManual(event)">
+            <div class="form-inputs-grid">
+              <div class="form-group">
+                <label>ip_bytes</label>
+                <input type="number" step="any" id="m_ip_bytes" value="4800" required oninput="calcDerived()">
+              </div>
+              <div class="form-group">
+                <label>ip_packet</label>
+                <input type="number" step="any" id="m_ip_packet" value="8" required oninput="calcDerived()">
+              </div>
+              <div class="form-group">
+                <label>port_rx_bytes</label>
+                <input type="number" step="any" id="m_port_rx_bytes" value="45600" required oninput="calcDerived()">
+              </div>
+              <div class="form-group">
+                <label>port_tx_bytes</label>
+                <input type="number" step="any" id="m_port_tx_bytes" value="51200" required oninput="calcDerived()">
+              </div>
+              <div class="form-group">
+                <label>port_rx_packets</label>
+                <input type="number" step="any" id="m_port_rx_packets" value="76" required oninput="calcDerived()">
+              </div>
+              <div class="form-group">
+                <label>port_duration_sec (&gt; 0)</label>
+                <input type="number" step="any" id="m_port_duration_sec" value="120" required oninput="calcDerived()">
+              </div>
+              <div class="form-group">
+                <label>port_flow_count</label>
+                <input type="number" step="any" id="m_port_flow_count" value="4" required>
+              </div>
+              <div class="form-group">
+                <label>table_active_count</label>
+                <input type="number" step="any" id="m_table_active_count" value="3" required>
+              </div>
+            </div>
+
+            <!-- Derived R1 Ratios Preview -->
+            <div class="derived-box">
+              <div class="derived-item">
+                <span>ip_bytes / ip_packet</span>
+                <span id="d_bytes_per_pkt">600.00</span>
+              </div>
+              <div class="derived-item">
+                <span>rx_bytes / sec</span>
+                <span id="d_rx_rate">380.00</span>
+              </div>
+              <div class="derived-item">
+                <span>tx_bytes / sec</span>
+                <span id="d_tx_rate">426.67</span>
+              </div>
+              <div class="derived-item">
+                <span>rx_packets / sec</span>
+                <span id="d_rx_pkts_rate">0.63</span>
+              </div>
+              <div class="derived-item">
+                <span>rx_bytes / rx_packet</span>
+                <span id="d_rx_bytes_per_pkt">600.00</span>
+              </div>
+            </div>
+
+            <div style="margin-top: 1.25rem; display: flex; justify-content: flex-end;">
+              <button type="submit" class="btn btn-primary" id="btnManualSubmit">
+                Analyze Telemetry
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Result Card -->
+        <div class="card" id="manualResultCard">
+          <div class="card-title">Model Decision Output</div>
+          <div id="manualResultBody" style="display: flex; flex-direction: column; gap: 1rem;">
+            <div style="text-align: center; color: var(--text-muted); padding: 2rem 1rem;">
+              Fill telemetry parameters and click 'Analyze Telemetry' to evaluate.
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- PANELS 3 & 4: FEATURE IMPORTANCE & HONEST LIMITS -->
+    <div class="info-panels-grid">
+      
+      <!-- Panel 3: Feature importance (global) -->
+      <div class="card">
+        <div class="card-title">
+          <span>Feature importance (global)</span>
+          <span class="badge badge-medium">Random Forest</span>
+        </div>
+        <p style="font-size: 0.78rem; color: var(--text-dim); margin-bottom: 1rem; line-height: 1.4;">
+          Global Gini importance across the 100 decision trees in the honest live replay model. 
+          <em>These reflect overall model reliance learned during training across all classes, not local per-prediction SHAP attributions.</em>
+        </p>
+        <div id="featImpContainer">
+          <div style="color: var(--text-muted); font-size: 0.8rem;">Loading global feature importances...</div>
+        </div>
+      </div>
+
+      <!-- Panel 4: Honest Limits & Caveats -->
+      <div class="card">
+        <div class="card-title">
+          <span>Honest Limits &amp; Boundary Conditions</span>
+          <span class="badge badge-high">Empirical Audit</span>
+        </div>
+        <div class="limits-card-content" id="honestLimitsContainer">
+          <div style="color: var(--text-muted); font-size: 0.8rem;">Loading empirical limits from results/live_replay/...</div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    /* ==========================================================================
+       HEALTHGUARD AI - LIVE REPLAY CLIENT CONTROLLER
+       ========================================================================== */
+    let isStreaming = false;
+    let streamInterval = null;
+    let currentRowIdx = 0;
+    let currentScenario = 'Mixed random';
+    let streamSpeed = 1000;
+
+    // Running Counters
+    let statsTotal = 0;
+    let statsCorrect = 0;
+    let statsMisclass = 0;
+
+    function switchMode(mode) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+
+      if (mode === 'auto') {
+        document.getElementById('tabAutoBtn').classList.add('active');
+        document.getElementById('autoPane').classList.add('active');
+      } else {
+        document.getElementById('tabManualBtn').classList.add('active');
+        document.getElementById('manualPane').classList.add('active');
+        stopStream();
+      }
+    }
+
+    function onScenarioChange() {
+      currentScenario = document.getElementById('scenarioSelect').value;
+      currentRowIdx = 0;
+      document.getElementById('streamRowIndicator').textContent = 'Offset: ' + currentRowIdx;
+    }
+
+    function updateSpeed() {
+      streamSpeed = parseInt(document.getElementById('speedSelect').value);
+      if (isStreaming) {
+        clearInterval(streamInterval);
+        streamInterval = setInterval(fetchNextRow, streamSpeed);
+      }
+    }
+
+    function startStream() {
+      if (isStreaming) return;
+      isStreaming = true;
+      document.getElementById('btnStart').disabled = true;
+      document.getElementById('btnStop').disabled = false;
+      document.getElementById('scenarioSelect').disabled = true;
+      fetchNextRow();
+      streamInterval = setInterval(fetchNextRow, streamSpeed);
+    }
+
+    function stopStream() {
+      if (!isStreaming) return;
+      isStreaming = false;
+      clearInterval(streamInterval);
+      document.getElementById('btnStart').disabled = false;
+      document.getElementById('btnStop').disabled = true;
+      document.getElementById('scenarioSelect').disabled = false;
+    }
+
+    function resetStats() {
+      statsTotal = 0;
+      statsCorrect = 0;
+      statsMisclass = 0;
+      currentRowIdx = 0;
+      updateHUD();
+      document.getElementById('streamTableBody').innerHTML = `
+        <tr><td colspan="12" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+          Counters reset. Start replay to stream test rows.
+        </td></tr>
+      `;
+      document.getElementById('streamRowIndicator').textContent = 'Offset: 0';
+    }
+
+    function updateHUD() {
+      document.getElementById('hudStreamed').textContent = statsTotal.toLocaleString();
+      document.getElementById('hudCorrect').textContent = statsCorrect.toLocaleString();
+      document.getElementById('hudMisclass').textContent = statsMisclass.toLocaleString();
+      const acc = statsTotal > 0 ? ((statsCorrect / statsTotal) * 100).toFixed(2) : '100.00';
+      document.getElementById('hudAccuracy').textContent = acc + '%';
+    }
+
+    async function fetchNextRow() {
+      try {
+        const url = `/api/live/stream?scenario=${encodeURIComponent(currentScenario)}&row_idx=${currentRowIdx}`;
+        const resp = await fetch(url);
+        if (!resp.ok) throw new Error('Stream fetch failed');
+        const data = await resp.json();
+
+        currentRowIdx = data.next_index;
+        document.getElementById('streamRowIndicator').textContent = `Offset: ${data.test_row_index} / ${data.total_scenario_test_rows}`;
+
+        statsTotal++;
+        if (data.prediction.is_correct) {
+          statsCorrect++;
+        } else {
+          statsMisclass++;
+        }
+        updateHUD();
+        renderThreatBanner(data);
+        renderStreamTableRow(data);
+
+      } catch (err) {
+        console.error('Stream error:', err);
+        stopStream();
+      }
+    }
+
+    function renderThreatBanner(data) {
+      const banner = document.getElementById('threatBanner');
+      const badge = document.getElementById('threatBadge');
+      const text = document.getElementById('threatText');
+      const asset = document.getElementById('threatAsset');
+
+      const p = data.prediction;
+      banner.className = 'threat-banner';
+
+      if (p.is_attack) {
+        banner.classList.add('attack');
+        badge.className = 'badge badge-critical';
+        badge.textContent = p.severity + ' ATTACK';
+        text.innerHTML = `<strong>${p.class_name}</strong> detected with <strong>${p.confidence_pct}%</strong> confidence (True: <strong>${data.true_label}</strong>).`;
+      } else {
+        badge.className = 'badge badge-safe';
+        badge.textContent = 'NORMAL';
+        text.innerHTML = `<strong>Normal clinical telemetry</strong> verified with <strong>${p.confidence_pct}%</strong> confidence.`;
+      }
+
+      asset.textContent = `Target: ${p.target_asset}`;
+    }
+
+    function renderStreamTableRow(data) {
+      const tbody = document.getElementById('streamTableBody');
+      if (statsTotal === 1) {
+        tbody.innerHTML = '';
+      }
+
+      const p = data.prediction;
+      const raw = data.raw_parameters;
+      const der = data.derived_features;
+
+      const tr = document.createElement('tr');
+      const statusHtml = p.is_correct
+        ? `<span style="color: var(--neon-emerald); font-weight: 600;">&#10003; MATCH</span>`
+        : `<span style="color: var(--neon-crimson); font-weight: 600;">&#10007; MISCLASSIFIED</span>`;
+
+      tr.innerHTML = `
+        <td>${data.test_row_index}</td>
+        <td>${data.dataset_row_index}</td>
+        <td><strong>${data.true_label}</strong></td>
+        <td style="color: ${p.color}; font-weight: 600;">${p.class_name}</td>
+        <td>${p.confidence_pct}%</td>
+        <td>${statusHtml}</td>
+        <td>${raw.ip_bytes.toLocaleString()}</td>
+        <td>${raw.ip_packet.toLocaleString()}</td>
+        <td>${der.port_rx_bytes_rate.toLocaleString()}</td>
+        <td>${der.port_tx_bytes_rate.toLocaleString()}</td>
+        <td>${der.port_rx_packets_rate.toLocaleString()}</td>
+        <td>${raw.table_active_count}</td>
+      `;
+
+      tbody.insertBefore(tr, tbody.firstChild);
+
+      // Keep table at max 50 rows for browser performance
+      while (tbody.children.length > 50) {
+        tbody.removeChild(tbody.lastChild);
+      }
+    }
+
+    // Manual Form Calculation
+    function calcDerived() {
+      const ip_b = parseFloat(document.getElementById('m_ip_bytes').value) || 0;
+      const ip_p = parseFloat(document.getElementById('m_ip_packet').value) || 0;
+      const rx_b = parseFloat(document.getElementById('m_port_rx_bytes').value) || 0;
+      const tx_b = parseFloat(document.getElementById('m_port_tx_bytes').value) || 0;
+      const rx_p = parseFloat(document.getElementById('m_port_rx_packets').value) || 0;
+      const dur = parseFloat(document.getElementById('m_port_duration_sec').value) || 0;
+
+      const b_per_p = ip_p > 0 ? (ip_b / ip_p).toFixed(2) : '0.00';
+      const rx_rate = dur > 0 ? (rx_b / dur).toFixed(2) : '0.00';
+      const tx_rate = dur > 0 ? (tx_b / dur).toFixed(2) : '0.00';
+      const rx_p_rate = dur > 0 ? (rx_p / dur).toFixed(2) : '0.00';
+      const rx_b_per_p = rx_p > 0 ? (rx_b / rx_p).toFixed(2) : '0.00';
+
+      document.getElementById('d_bytes_per_pkt').textContent = b_per_p;
+      document.getElementById('d_rx_rate').textContent = rx_rate;
+      document.getElementById('d_tx_rate').textContent = tx_rate;
+      document.getElementById('d_rx_pkts_rate').textContent = rx_p_rate;
+      document.getElementById('d_rx_bytes_per_pkt').textContent = rx_b_per_p;
+    }
+
+    async function loadExample(scenario) {
+      if (!scenario) return;
+      try {
+        const resp = await fetch(`/api/live/sample_row?scenario=${encodeURIComponent(scenario)}`);
+        if (!resp.ok) throw new Error('Sample fetch failed');
+        const s = await resp.json();
+
+        document.getElementById('m_ip_bytes').value = s.ip_bytes;
+        document.getElementById('m_ip_packet').value = s.ip_packet;
+        document.getElementById('m_port_rx_bytes').value = s.port_rx_bytes;
+        document.getElementById('m_port_tx_bytes').value = s.port_tx_bytes;
+        document.getElementById('m_port_rx_packets').value = s.port_rx_packets;
+        document.getElementById('m_port_duration_sec').value = s.port_duration_sec;
+        document.getElementById('m_port_flow_count').value = s.port_flow_count;
+        document.getElementById('m_table_active_count').value = s.table_active_count;
+
+        calcDerived();
+        // Automatically submit example
+        submitManual(null);
+      } catch (err) {
+        console.error('Example load error:', err);
+      }
+    }
+
+    async function submitManual(e) {
+      if (e) e.preventDefault();
+      const cardBody = document.getElementById('manualResultBody');
+      cardBody.innerHTML = `<div style="text-align: center; color: var(--neon-cyan); padding: 1.5rem;">Analyzing telemetry with live R1 model...</div>`;
+
+      const payload = {
+        ip_bytes: document.getElementById('m_ip_bytes').value,
+        ip_packet: document.getElementById('m_ip_packet').value,
+        port_rx_bytes: document.getElementById('m_port_rx_bytes').value,
+        port_tx_bytes: document.getElementById('m_port_tx_bytes').value,
+        port_rx_packets: document.getElementById('m_port_rx_packets').value,
+        port_duration_sec: document.getElementById('m_port_duration_sec').value,
+        port_flow_count: document.getElementById('m_port_flow_count').value,
+        table_active_count: document.getElementById('m_table_active_count').value
+      };
+
+      try {
+        const resp = await fetch('/api/live/predict_manual', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await resp.json();
+        if (!resp.ok) {
+          cardBody.innerHTML = `
+            <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid var(--border-crimson); padding: 1rem; border-radius: 8px; color: #fca5a5;">
+              <strong>Validation Error:</strong> ${data.error || 'Request rejected.'}
+            </div>
+          `;
+          return;
+        }
+
+        const p = data.prediction;
+        let probRowsHtml = '';
+        for (const [cname, prob] of Object.entries(p.probabilities)) {
+          const pct = (prob * 100).toFixed(1);
+          probRowsHtml += `
+            <div style="display: flex; justify-content: space-between; font-size: 0.78rem; font-family: var(--font-mono); padding: 3px 0; border-bottom: 1px solid rgba(255,255,255,0.04);">
+              <span>${cname}</span>
+              <span style="color: ${cname === p.class_name ? 'var(--neon-cyan)' : 'var(--text-dim)'}; font-weight: 600;">${pct}%</span>
+            </div>
+          `;
+        }
+
+        cardBody.innerHTML = `
+          <div style="padding: 1rem; border-radius: 8px; background: rgba(11, 18, 38, 0.6); border: 1px solid var(--border-subtle); display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-dim); font-weight: 600;">Classification</span>
+              <span class="badge ${p.is_attack ? 'badge-critical' : 'badge-safe'}">${p.severity}</span>
+            </div>
+            <div style="font-size: 1.35rem; font-family: var(--font-heading); font-weight: 700; color: ${p.color};">
+              ${p.class_name}
+            </div>
+            <div style="font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-main);">
+              Model Confidence: <strong>${p.confidence_pct}%</strong>
+            </div>
+            <div style="font-size: 0.78rem; color: var(--text-muted);">
+              Target: ${p.target_asset}
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size: 0.78rem; font-weight: 600; color: var(--text-dim); text-transform: uppercase; margin-bottom: 6px;">
+              Full Probability Distribution
+            </div>
+            ${probRowsHtml}
+          </div>
+        `;
+
+      } catch (err) {
+        cardBody.innerHTML = `<div style="color: var(--neon-crimson); padding: 1rem;">Network error evaluating telemetry: ${err.message}</div>`;
+      }
+    }
+
+    // Load Global Feature Importances
+    async function loadFeatureImportances() {
+      const container = document.getElementById('featImpContainer');
+      try {
+        const resp = await fetch('/api/live/feature_importances');
+        if (!resp.ok) throw new Error('Failed to load feature importances');
+        const data = await resp.json();
+
+        let html = '';
+        data.features.forEach(f => {
+          html += `
+            <div class="bar-row">
+              <span class="bar-label" title="${f.feature}">${f.feature}</span>
+              <div class="bar-track">
+                <div class="bar-fill" style="width: ${Math.min(100, f.importance_pct * 3)}%;"></div>
+              </div>
+              <span class="bar-val">${f.importance_pct}%</span>
+            </div>
+          `;
+        });
+        container.innerHTML = html;
+      } catch (err) {
+        container.innerHTML = `<div style="color: var(--neon-crimson);">Error loading feature importances.</div>`;
+      }
+    }
+
+    // Load Honest Limits
+    async function loadHonestLimits() {
+      const container = document.getElementById('honestLimitsContainer');
+      try {
+        const resp = await fetch('/api/live/honest_limits');
+        if (!resp.ok) throw new Error('Failed to load limits');
+        const limits = await resp.json();
+
+        const accPct = (limits.temporal_split_accuracy * 100).toFixed(2);
+        const f1Pct = (limits.temporal_macro_f1 * 100).toFixed(2);
+
+        let recConfusionsHtml = '';
+        limits.weakest_recall_confusions.forEach(c => {
+          recConfusionsHtml += `<li>Confused as <strong>${c.predicted_as}</strong>: ${c.count.toLocaleString()} rows (${c.pct}%)</li>`;
+        });
+
+        let precConfusionsHtml = '';
+        limits.weakest_precision_confusions.forEach(c => {
+          precConfusionsHtml += `<li>False alarm from true <strong>${c.true_class}</strong>: ${c.count.toLocaleString()} rows (${c.pct}%)</li>`;
+        });
+
+        container.innerHTML = `
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <div style="flex: 1; background: rgba(11, 18, 38, 0.6); padding: 0.75rem 1rem; border-radius: 6px; border: 1px solid var(--border-subtle);">
+              <div style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase;">Held-Out Test Accuracy</div>
+              <div style="font-family: var(--font-mono); font-size: 1.25rem; font-weight: 700; color: var(--neon-cyan);">${accPct}%</div>
+            </div>
+            <div style="flex: 1; background: rgba(11, 18, 38, 0.6); padding: 0.75rem 1rem; border-radius: 6px; border: 1px solid var(--border-subtle);">
+              <div style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase;">Held-Out Macro F1</div>
+              <div style="font-family: var(--font-mono); font-size: 1.25rem; font-weight: 700; color: var(--neon-emerald);">${f1Pct}%</div>
+            </div>
+          </div>
+
+          <div style="background: rgba(11, 18, 38, 0.4); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 0.85rem 1rem;">
+            <div style="font-weight: 600; color: var(--text-main); margin-bottom: 4px;">
+              Weakest Recall: <span style="color: var(--neon-amber);">${limits.weakest_recall_class}</span> (${(limits.weakest_recall_val * 100).toFixed(2)}%)
+            </div>
+            <ul style="margin-left: 1.25rem; font-size: 0.8rem; color: var(--text-dim);">
+              ${recConfusionsHtml}
+            </ul>
+          </div>
+
+          <div style="background: rgba(11, 18, 38, 0.4); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 0.85rem 1rem;">
+            <div style="font-weight: 600; color: var(--text-main); margin-bottom: 4px;">
+              Weakest Precision: <span style="color: var(--neon-crimson);">${limits.weakest_precision_class}</span> (${(limits.weakest_precision_val * 100).toFixed(2)}%)
+            </div>
+            <ul style="margin-left: 1.25rem; font-size: 0.8rem; color: var(--text-dim);">
+              ${precConfusionsHtml}
+            </ul>
+          </div>
+
+          <div class="hypothesis-box">
+            <strong>Theoretical Limitation (Hypothesis):</strong> ${limits.hypothesis}
+          </div>
+
+          <div class="caveat-box">
+            <strong>Out-of-Distribution Warning:</strong> Evaluated on non-SDN traffic (e.g. <code>normal_iperf.csv</code>), this model flags 
+            <strong>${limits.iperf_false_positive_pct}%</strong> as false alarms (primarily <strong>${limits.iperf_top_false_label}</strong>), because high volume/packet stress mimics attack signatures.
+          </div>
+        `;
+
+      } catch (err) {
+        container.innerHTML = `<div style="color: var(--neon-crimson);">Error loading honest limits: ${err.message}</div>`;
+      }
+    }
+
+    // Initialize Page
+    window.addEventListener('DOMContentLoaded', () => {
+      calcDerived();
+      loadFeatureImportances();
+      loadHonestLimits();
+    });
+  </script>
+</body>
+</html>
+

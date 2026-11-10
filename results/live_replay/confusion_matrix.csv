@@ -1,0 +1,10 @@
+,Pred_BruteForce,Pred_CMD,Pred_Normal,Pred_Probe,Pred_SQLInjection,Pred_Smaba,Pred_TCPDDOS,Pred_UDPDDOS,Pred_VNC
+True_BruteForce,12104,0,0,0,0,0,0,0,0
+True_CMD,0,12379,0,0,0,0,0,0,0
+True_Normal,0,0,11524,0,0,0,0,0,0
+True_Probe,0,0,0,11275,0,0,0,0,0
+True_SQLInjection,432,7571,0,0,14361,0,0,0,0
+True_Smaba,0,0,0,0,0,14138,0,0,0
+True_TCPDDOS,0,0,0,0,0,0,18172,0,0
+True_UDPDDOS,0,0,2,0,0,0,0,25108,0
+True_VNC,0,0,0,0,0,2,0,0,12165

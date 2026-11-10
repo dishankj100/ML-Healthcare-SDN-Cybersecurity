@@ -388,6 +388,90 @@ def predict():
     return render_template('prediction.html', output=output)
 
 
+# ============================================================================
+# LIVE LAB (REPLAY SIMULATION) ROUTES
+# ============================================================================
+@app.route('/live')
+def live_page():
+    """Render the Live Lab Replay Simulation page."""
+    return render_template('live.html')
+
+
+@app.route('/api/live/stream')
+def api_live_stream():
+    """Stream consecutive test-partition rows for replay simulation."""
+    scenario = request.args.get('scenario', 'Mixed random')
+    row_idx = request.args.get('row_idx', None)
+    if row_idx is not None:
+        try:
+            row_idx = int(row_idx)
+        except ValueError:
+            row_idx = None
+    try:
+        from live_replay_service import get_live_service
+        svc = get_live_service()
+        res = svc.stream_next(scenario=scenario, row_idx=row_idx)
+        return jsonify(res)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/live/predict_manual', methods=['POST'])
+def api_live_predict_manual():
+    """Run honest R1 model inference on user-entered manual telemetry parameters."""
+    try:
+        data = request.get_json(silent=True) or request.form.to_dict()
+        if not data:
+            return jsonify({'error': 'No telemetry payload received.'}), 400
+        from live_replay_service import get_live_service
+        svc = get_live_service()
+        res = svc.predict_manual(data)
+        return jsonify(res)
+    except ValueError as ve:
+        return jsonify({'error': str(ve)}), 400
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/live/sample_row')
+def api_live_sample_row():
+    """Return genuine test-partition parameters for manual form example loading."""
+    scenario = request.args.get('scenario', 'Normal')
+    try:
+        offset = int(request.args.get('offset', 0))
+    except ValueError:
+        offset = 0
+    try:
+        from live_replay_service import get_live_service
+        svc = get_live_service()
+        res = svc.get_sample_row(scenario=scenario, offset=offset)
+        return jsonify(res)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/live/honest_limits')
+def api_live_honest_limits():
+    """Return dynamically loaded empirical test limits, confusions, and caveats."""
+    try:
+        from live_replay_service import get_live_service
+        svc = get_live_service()
+        return jsonify(svc.get_honest_limits())
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/live/feature_importances')
+def api_live_feature_importances():
+    """Return global Gini feature importances learned across R1 features."""
+    try:
+        from live_replay_service import get_live_service
+        svc = get_live_service()
+        return jsonify(svc.get_global_feature_importances())
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 if __name__ == "__main__":
     app.run(debug=True)
 
