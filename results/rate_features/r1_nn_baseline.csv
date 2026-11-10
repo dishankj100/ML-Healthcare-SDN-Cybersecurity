@@ -1,0 +1,3 @@
+Split,Feature_Space,Train_Rows,Test_Rows_Sampled,Median_Distance,P90_Distance,Min_Distance,Max_Distance,Share_Distance_Zero_Pct,Count_Distance_Zero,Share_Distance_Under_0.01_Pct,Share_Distance_Under_0.1_Pct
+Random 80/20 Split (R1 space),R1 (log1p rates),376072,20000,0.001378,0.0241,0.0,1.115825,0.815,163,76.81,98.895
+Temporal 70/30 Split with 200-row gap (R1 space),R1 (log1p rates),329058,20000,0.041813,0.168765,2e-06,3.600283,0.0,0,11.795,81.59
