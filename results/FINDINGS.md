@@ -372,6 +372,27 @@ typed or pasted in one at a time with no history, R2 cannot be computed at all â
 single-row features are available. R2 is therefore not a drop-in replacement for the current
 feature set in every deployment context.
 
+### Audit of the 0.9999 R1 Logistic Regression result
+
+Source: `results/rate_features/r1_lr_audit.csv`.
+
+Because an accuracy of 0.9999 on a temporal split is extraordinarily high, an audit was conducted across five checks:
+
+1. **Per-class recall & confusion matrix:** Out of 139,233 test rows, exactly **13 rows (0.0093%)** are misclassified: 8 TCPDDOS misclassified as Smaba, 3 VNC as Smaba, 1 CMD as Normal, and 1 VNC as TCPDDOS. Every class has recall $\ge 0.9995$ (seven classes at 1.000000).
+2. **Single-feature accuracy:** No single R1 feature achieves high accuracy on its own. LR accuracy on individual features ranges from 0.2649 (`ip_bytes_per_packet`) to 0.6155 (`port_rx_bytes_per_packet`) and 0.5947 (`table_active_count`). For Random Forest, the highest single-feature accuracy is 0.6991 (`ip_bytes`) and 0.6557 (`table_active_count`).
+3. **Drop-one ablation:** Dropping any single feature leaves LR test accuracy above 0.9991, with the sole exception of `port_tx_bytes_rate`, where dropping it reduces accuracy slightly to **0.9570** ($\Delta = -0.0429$). The 0.9999 score does not depend on any fragile single feature.
+4. **Drift and nearest-neighbour distance in R1 space:**
+   - In R1 space, 100% of test rows still exceed train maximums for BruteForce, CMD, SQLInjection, and UDPDDOS, but Normal (0.02%), Smaba (0.00%), and VNC (0.15%) have near-zero upper-bound drift.
+   - For a 20,000-row test sample, the **median nearest-neighbour distance drops to 0.0419** (down from 0.2547 on the original counters), with **81.40% of test points falling within distance < 0.1** of a training row (up from 30.60%). Because R1 divides cumulative counters by switch uptime (`port_duration_sec`), it computes capture-lifetime averages that stabilize around fixed constants for each session, pulling test rows into tight Euclidean clusters around their respective training rows.
+5. **Unseen traffic:**
+   - On the three internet traces, the model labels **100.00% as Normal** (only 1 false positive out of 65,215 total rows).
+   - On `normal_iperf.csv`, the model labels only **26.23% as Normal**, classifying **72.46% (26,142 rows) as BruteForce**.
+   - On `ddos_attack_scapy_new.csv`, it classifies **100.00% (29,257 rows) as UDPDDOS**.
+
+**What these numbers show:** The 0.9999 accuracy is mathematically genuine under the temporal split and resilient to feature ablation, but it is heavily aided by R1's lifetime-averaging formulation, which clusters test points closely around training points in normalized space (median 1-NN distance 0.0419 vs 0.2547).
+
+**What the audit cannot establish:** The audit cannot prove that this model has learned generalized multi-vector attack mechanics rather than session-specific traffic profiles. The fact that high-throughput clinical iperf traffic is 72.5% misclassified as BruteForce demonstrates that the model remains vulnerable to false positives when presented with benign traffic patterns that differ in volume or packet rates from the single `normal_ditg.csv` capture.
+
 ### What section 7 does not show
 
 - It does not show that the rate features detect attack behaviour better. R2 scored *lower*

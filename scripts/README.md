@@ -13,3 +13,4 @@ This directory contains the standalone offline diagnostic and experiment scripts
 - `_step3_train.py`: Trains and evaluates the 8-model suite on R1 and R2 feature sets using cross-validation.
 - `_step4_confound.py`: Computes confound baselines including uniform chance, majority class, `port_duration_sec` alone, and `table_active_count` alone.
 - `_step5_final.py`: Runs final offline verification: evaluates Logistic Regression with `max_iter=5000` + `log1p` on rate features, and performs validation-block tuning (85% train / 15% validation) across all 8 models for R1 and R2.
+- `audit_r1_lr.py`: Audits the 0.9999 test accuracy of R1 Logistic Regression with log1p across confusion matrix/recall, single-feature evaluations, drop-one ablation, drift/NN distance, and unseen traffic.
