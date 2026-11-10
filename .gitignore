@@ -53,3 +53,7 @@ model.zip
 *.pptx
 *.ppt
 
+# Tool & Local Metadata
+.perch/
+
+
